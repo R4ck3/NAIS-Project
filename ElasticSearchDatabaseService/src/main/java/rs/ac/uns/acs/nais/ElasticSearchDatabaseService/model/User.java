@@ -8,18 +8,18 @@ import org.springframework.beans.factory.annotation.Value;
 public class User {
     @Id
     private String id;
-    private String full_name;
+    private String fullName;
     private String username;
     private String email;
-    private String phone_number;
+    private String phoneNumber;
     private String address;
 
-    public User(String id, String full_name, String username, String email, String phone_number, String address) {
+    public User(String id, String fullName, String username, String email, String phoneNumber, String address) {
         this.id = id;
-        this.full_name = full_name;
+        this.fullName = fullName;
         this.username = username;
         this.email = email;
-        this.phone_number = phone_number;
+        this.phoneNumber = phoneNumber;
         this.address = address;
     }
 
@@ -35,12 +35,12 @@ public class User {
         this.id = id;
     }
 
-    public String getFull_name() {
-        return full_name;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setFull_name(String full_name) {
-        this.full_name = full_name;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getUsername() {
@@ -59,12 +59,12 @@ public class User {
         this.email = email;
     }
 
-    public String getPhone_number() {
-        return phone_number;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
-    public void setPhone_number(String phone_number) {
-        this.phone_number = phone_number;
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
     }
 
     public String getAddress() {

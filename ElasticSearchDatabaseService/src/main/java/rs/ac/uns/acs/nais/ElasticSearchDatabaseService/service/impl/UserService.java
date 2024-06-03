@@ -30,11 +30,11 @@ public class UserService implements IUserService {
     }
 
     public List<User> findByFullNameOrUsername(String fullName, String username) {
-        return userRepository.findByFull_nameOrUsername(fullName, username);
+        return userRepository.findByFullNameOrUsername(fullName, username);
     }
 
     public List<User> findByFullNameContainingOrUsernameContaining(String fullName, String username) {
-        return userRepository.findByFull_nameContainingOrUsernameContaining(fullName, username);
+        return userRepository.findByFullNameContainingOrUsernameContaining(fullName, username);
     }
 
     public List<User> findByCustomQuery(String query) {
@@ -49,19 +49,15 @@ public class UserService implements IUserService {
         return userRepository.searchByFullNameOrUsernameFuzzy(searchTerm);
     }
 
-    public List<User> findByFullNameAndAddressNotAndOptional(String fullName, String mustNotTerms, String shouldTerms) {
-        return userRepository.findByFullNameAndAddressNotAndOptional(fullName, mustNotTerms, shouldTerms);
-    }
-
     public List<User> findByFunctionScore(String searchTerm, String boostTerms) {
         return userRepository.findByFunctionScore(searchTerm, boostTerms);
     }
 
-    public List<User> findByNestedAttributeAndAggregate(String attributeName, String attributeValue) {
-        return userRepository.findByNestedAttributeAndAggregate(attributeName, attributeValue);
-    }
-
     public List<User> findAll() {
         return userRepository.findAll();
+    }
+
+    public User createUser(User user) {
+        return userRepository.save(user);
     }
 }

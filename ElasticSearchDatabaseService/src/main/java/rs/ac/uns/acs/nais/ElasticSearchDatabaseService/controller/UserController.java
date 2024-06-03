@@ -28,11 +28,6 @@ public class UserController {
         return "hello";
     }
 
-    @PostMapping
-    public void addProduct(@RequestBody User user) {
-        userService.save(user);
-    }
-
     @GetMapping("/findByFullNameOrUsername")
     public List<User> findByFullNameOrUsername(@RequestParam(value = "fullName") String fullName,
                                                @RequestParam(value = "username") String username) {
@@ -60,16 +55,19 @@ public class UserController {
         return userService.searchByFullNameOrUsernameFuzzy(searchTerm);
     }
 
-    @GetMapping("/findByFullNameAndAddressNotAndOptional")
-    public List<User> findByFullNameAndAddressNotAndOptional(@RequestParam(value = "fullName") String fullName,
-                                                             @RequestParam(value = "mustNotTerms") String mustNotTerms,
-                                                             @RequestParam(value = "shouldTerms") String shouldTerms) {
-        return userService.findByFullNameAndAddressNotAndOptional(fullName, mustNotTerms, shouldTerms);
-    }
-
     @GetMapping("/findByFunctionScore")
     public List<User> findByFunctionScore(@RequestParam(value = "searchTerm") String searchTerm,
                                           @RequestParam(value = "boostTerms") String boostTerms) {
         return userService.findByFunctionScore(searchTerm, boostTerms);
+    }
+
+    @GetMapping("/findAll")
+    public List<User> findAll() {
+        return userService.findAll();
+    }
+
+    @PostMapping("/createUser")
+    public User createUser(@RequestBody User user) {
+        return userService.createUser(user);
     }
 }
