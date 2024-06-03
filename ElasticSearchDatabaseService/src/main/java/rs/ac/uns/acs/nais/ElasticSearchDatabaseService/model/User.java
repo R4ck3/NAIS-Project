@@ -2,6 +2,7 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.beans.factory.annotation.Value;
 
 @Document(indexName = "users")
 public class User {
@@ -12,6 +13,19 @@ public class User {
     private String email;
     private String phone_number;
     private String address;
+
+    public User(String id, String full_name, String username, String email, String phone_number, String address) {
+        this.id = id;
+        this.full_name = full_name;
+        this.username = username;
+        this.email = email;
+        this.phone_number = phone_number;
+        this.address = address;
+    }
+
+    public User(){
+            
+    }
 
     public String getId() {
         return id;

@@ -28,6 +28,11 @@ public class ProductController {
         productService.save(product);
     }
 
+    @GetMapping
+    public List<Product> getAllProducts() {
+        return productService.findAll();
+    }
+
     @GetMapping("findByNameOrDescription")
     public List<Product> findByNameOrDescription(@RequestParam(value = "name") String name,
                                                  @RequestParam(value = "description") String description) {
@@ -62,6 +67,10 @@ public class ProductController {
         return productService.findByNameAndDescriptionNotAndOptional(name, mustNotTerms, shouldTerms);
     }
 
+    @GetMapping("hello")
+        public String hello() {
+            return "hello";
+        }
 
     @GetMapping("findByFunctionScore")
     public List<Product> findByFunctionScore(@RequestParam(value = "searchTerm") String searchTerm,

@@ -19,4 +19,6 @@ public interface IProductService {
     List<Product> findByNameAndDescriptionNotAndOptional(String name, String mustNotTerms, String shouldTerms);
 
     List<Product> findByFunctionScore(String searchTerm, String boostTerms);
+
+    List<Product> findAll();
 }

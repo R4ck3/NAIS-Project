@@ -54,4 +54,8 @@ public interface ProductRepository extends ElasticsearchRepository<Product, Stri
      */
     @Query("{\"function_score\":{\"query\":{\"multi_match\":{\"query\":\"?0\",\"fields\":[\"name^3\",\"description\"]}},\"functions\":[{\"filter\":{\"match\":{\"description\":\"?1\"}},\"weight\":2}],\"score_mode\":\"sum\",\"boost_mode\":\"multiply\"}}")
     List<Product> findByFunctionScore(String searchTerm, String boostTerms);
+
+    @Query("{\"match_all\": {}}")
+    List<Product> findAll();
+
 }

@@ -63,6 +63,11 @@ public class ProductService implements IProductService {
     public List<Product> findByFunctionScore(String searchTerm, String boostTerms) {
         return productRepository.findByFunctionScore(searchTerm, boostTerms);
     }
+
+    @Override
+    public List<Product> findAll() {
+        return productRepository.findAll();
+    }
 /* 
     public byte[] export(List<Product> products) throws IOException {
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
