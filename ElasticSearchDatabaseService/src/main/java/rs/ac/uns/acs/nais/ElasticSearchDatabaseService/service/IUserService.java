@@ -3,6 +3,7 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.User;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserService {
 
@@ -23,4 +24,6 @@ public interface IUserService {
     User createUser(User user);
 
     void deleteUserById(String id);
+
+    Optional<User> findUserById(String id);  
 }

@@ -19,6 +19,8 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 import java.util.List;
+import java.util.Optional;
+
 
 @Service
 public class UserService implements IUserService {
@@ -63,5 +65,9 @@ public class UserService implements IUserService {
 
     public void deleteUserById(String id) {
         userRepository.deleteById(id);
+    }
+
+    public Optional<User> findUserById(String id) {
+        return userRepository.findById(id);
     }
 }

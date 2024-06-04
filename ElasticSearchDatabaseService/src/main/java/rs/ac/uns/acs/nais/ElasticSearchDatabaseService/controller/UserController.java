@@ -12,6 +12,8 @@ import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.UserService;
 import java.io.IOException;
 
 import java.util.List;
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/users.json")
@@ -21,11 +23,6 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    @GetMapping
-    public String hello() {
-        return "hello";
     }
 
     @GetMapping("/findByFullNameOrUsername")
@@ -75,5 +72,11 @@ public class UserController {
     public ResponseEntity<Void> deleteUserById(@PathVariable String id) {
         userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<User> findUserById(@PathVariable String id) {
+        Optional<User> user = userService.findUserById(id);
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

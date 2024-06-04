@@ -5,6 +5,7 @@ import org.springframework.data.elasticsearch.repository.ElasticsearchRepository
 import org.springframework.stereotype.Repository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.User;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends ElasticsearchRepository<User, String> {
@@ -29,4 +30,7 @@ public interface UserRepository extends ElasticsearchRepository<User, String> {
     List<User> findAll();
 
     void deleteById(String id);
+
+    @Query("{\"term\": {\"_id\": \"?0\"}}")
+    Optional<User> findById(String id);
 }
