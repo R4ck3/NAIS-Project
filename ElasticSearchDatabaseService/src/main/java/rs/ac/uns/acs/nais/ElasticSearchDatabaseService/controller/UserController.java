@@ -70,4 +70,10 @@ public class UserController {
     public User createUser(@RequestBody User user) {
         return userService.createUser(user);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserById(@PathVariable String id) {
+        userService.deleteUserById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

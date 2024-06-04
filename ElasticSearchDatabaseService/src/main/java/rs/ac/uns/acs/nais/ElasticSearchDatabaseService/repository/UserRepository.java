@@ -27,4 +27,6 @@ public interface UserRepository extends ElasticsearchRepository<User, String> {
 
     @Query("{\"match_all\": {}}")
     List<User> findAll();
+
+    void deleteById(String id);
 }

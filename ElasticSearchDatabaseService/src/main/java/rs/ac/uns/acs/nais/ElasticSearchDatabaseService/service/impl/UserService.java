@@ -60,4 +60,8 @@ public class UserService implements IUserService {
     public User createUser(User user) {
         return userRepository.save(user);
     }
+
+    public void deleteUserById(String id) {
+        userRepository.deleteById(id);
+    }
 }

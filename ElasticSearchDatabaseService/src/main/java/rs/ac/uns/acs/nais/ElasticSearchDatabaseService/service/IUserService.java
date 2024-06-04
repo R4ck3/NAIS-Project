@@ -21,4 +21,6 @@ public interface IUserService {
     List<User> findAll();
 
     User createUser(User user);
+
+    void deleteUserById(String id);
 }
