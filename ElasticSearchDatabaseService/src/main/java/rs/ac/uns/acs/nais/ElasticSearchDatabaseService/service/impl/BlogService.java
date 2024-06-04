@@ -43,4 +43,8 @@ public class BlogService implements IBlogService {
         blogRepository.deleteById(id);
     }
 
+    public Optional<Blog> findBlogById(String id) {
+        return blogRepository.findById(id);
+    }
+
 }

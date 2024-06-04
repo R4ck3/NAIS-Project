@@ -40,4 +40,12 @@ public class BlogController {
         blogService.deleteBlogById(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<Blog> findBlogById(@PathVariable String id) {
+        Optional<Blog> blog = blogService.findBlogById(id);
+        return blog.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    
 }

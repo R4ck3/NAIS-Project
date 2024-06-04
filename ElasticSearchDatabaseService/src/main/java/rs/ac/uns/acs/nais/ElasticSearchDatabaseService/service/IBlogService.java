@@ -13,4 +13,5 @@ public interface IBlogService {
 
     void deleteBlogById(String id);
 
+    Optional<Blog> findBlogById(String id);  
 }

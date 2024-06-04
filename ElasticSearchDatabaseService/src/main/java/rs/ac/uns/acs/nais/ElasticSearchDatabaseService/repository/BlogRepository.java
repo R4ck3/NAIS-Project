@@ -16,4 +16,7 @@ public interface BlogRepository extends ElasticsearchRepository<Blog, String> {
 
     void deleteById(String id);
 
+    @Query("{\"term\": {\"_id\": \"?0\"}}")
+    Optional<Blog> findById(String id);
+
 }
