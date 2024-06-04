@@ -74,4 +74,8 @@ public class BlogController {
         return blogService.searchByTitleOrDescriptionFuzzy(searchTerm);
     }
 
+    @GetMapping("/author/{authorId}")
+        public List<Blog> getBlogsByAuthorId(@PathVariable String authorId) {
+            return blogService.findByAuthorId(authorId);
+    }
 }

@@ -33,4 +33,7 @@ public interface BlogRepository extends ElasticsearchRepository<Blog, String> {
     @Query("{\"multi_match\":{\"query\":\"?0\",\"fields\":[\"title^3\",\"description\"],\"fuzziness\":\"AUTO\"}}")
     List<Blog> searchByTitleOrDescriptionFuzzy(String searchTerm);
 
+    @Query("{\"bool\": {\"must\": [{\"match\": {\"authorId\": \"?0\"}}]}}")
+    List<Blog> findByAuthorId(String authorId);
+
 }

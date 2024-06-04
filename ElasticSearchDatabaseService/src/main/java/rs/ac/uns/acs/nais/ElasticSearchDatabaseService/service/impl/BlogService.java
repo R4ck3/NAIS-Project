@@ -69,4 +69,7 @@ public class BlogService implements IBlogService {
         return blogRepository.searchByTitleOrDescriptionFuzzy(searchTerm);
     }
 
+    public List<Blog> findByAuthorId(String authorId) {
+        return blogRepository.findByAuthorId(authorId);
+    }
 }

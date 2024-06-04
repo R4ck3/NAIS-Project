@@ -24,4 +24,6 @@ public interface IBlogService {
     List<Blog> searchByDescriptionPhrase(String phrase);
 
     List<Blog> searchByTitleOrDescriptionFuzzy(String searchTerm);
+
+    List<Blog> findByAuthorId(String authorId);
 }
