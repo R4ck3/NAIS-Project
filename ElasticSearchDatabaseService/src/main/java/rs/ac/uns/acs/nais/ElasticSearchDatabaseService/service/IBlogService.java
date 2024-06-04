@@ -13,5 +13,15 @@ public interface IBlogService {
 
     void deleteBlogById(String id);
 
-    Optional<Blog> findBlogById(String id);  
+    Optional<Blog> findBlogById(String id); 
+
+    List<Blog> findByTitleOrAuthorId(String title, String authorId); 
+
+    List<Blog> findByTitleContainingOrAuthorIdContaining(String title, String authorId);
+
+    List<Blog> findByCustomQuery(String query);
+
+    List<Blog> searchByDescriptionPhrase(String phrase);
+
+    List<Blog> searchByTitleOrDescriptionFuzzy(String searchTerm);
 }

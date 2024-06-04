@@ -47,5 +47,31 @@ public class BlogController {
         return blog.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    
+    @GetMapping("/findByTitleOrAuthorId")
+    public List<Blog> findByTitleOrAuthorId(@RequestParam(value = "title") String title,
+                                               @RequestParam(value = "authorId") String authorId) {
+        return blogService.findByTitleOrAuthorId(title, authorId);
+    }
+
+    @GetMapping("/findByTitleContainingOrAuthorIdContaining")
+    public List<Blog> findByTitleContainingOrAuthorIdContaining(@RequestParam(value = "title") String title,
+                                                                   @RequestParam(value = "authorId") String authorId) {
+        return blogService.findByTitleContainingOrAuthorIdContaining(title, authorId);
+    }
+
+    @GetMapping("/findByCustomQuery")
+    public List<Blog> findByCustomQuery(@RequestParam(value = "query") String query) {
+        return blogService.findByCustomQuery(query);
+    }
+
+    @GetMapping("/searchByDescriptionPhrase")
+    public List<Blog> searchByDescriptionPhrase(@RequestParam(value = "phrase") String phrase) {
+        return blogService.searchByDescriptionPhrase(phrase);
+    }
+
+    @GetMapping("/searchByTitleOrDescriptionFuzzy")
+    public List<Blog> searchByTitleOrDescriptionFuzzy(@RequestParam(value = "searchTerm") String searchTerm) {
+        return blogService.searchByTitleOrDescriptionFuzzy(searchTerm);
+    }
+
 }
