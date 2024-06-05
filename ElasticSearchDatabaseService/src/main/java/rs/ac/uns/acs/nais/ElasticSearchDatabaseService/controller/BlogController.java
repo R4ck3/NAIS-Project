@@ -99,4 +99,9 @@ public class BlogController {
         }
         return responseEntity;
     }
+
+    @GetMapping("/findAllOrderByCreatedAtDesc")
+    public List<Blog> findAllOrderByCreatedAtDesc() {
+        return blogService.findAllOrderByCreatedAtDesc();
+    }
 }

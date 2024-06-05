@@ -30,4 +30,5 @@ public interface IBlogService {
 
     List<Blog> findByAuthorIdAndCategoryAndTitle(String authorId, String category, String title);
 
+    List<Blog> findAllOrderByCreatedAtDesc();
 }

@@ -22,6 +22,7 @@ import java.time.format.DateTimeFormatter;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Date;
 
 
 @Service
@@ -34,6 +35,7 @@ public class BlogService implements IBlogService {
     }
 
     public Blog createBlog(Blog blog) {
+        blog.setCreatedAt(new Date());
         return blogRepository.save(blog);
     }
 
@@ -87,5 +89,9 @@ public class BlogService implements IBlogService {
         } else {
             return ResponseEntity.notFound().build();
         }
+    }
+
+    public List<Blog> findAllOrderByCreatedAtDesc() {
+        return blogRepository.findAllOrderByCreatedAtDesc();
     }
 }
