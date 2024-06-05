@@ -72,4 +72,20 @@ public class BlogService implements IBlogService {
     public List<Blog> findByAuthorId(String authorId) {
         return blogRepository.findByAuthorId(authorId);
     }
+
+    public List<Blog> findByAuthorIdAndCategoryAndTitle(String authorId, String category, String title) {
+        return blogRepository.findByAuthorIdAndCategoryAndTitle(authorId, category, title);
+    }
+
+    public ResponseEntity<Blog> updateBlogDescription(String blogId, String newDescription) {
+        Optional<Blog> optionalBlog = blogRepository.findById(blogId);
+        if (optionalBlog.isPresent()) {
+            Blog blog = optionalBlog.get();
+            blog.setDescription(newDescription);
+            blogRepository.save(blog);
+            return ResponseEntity.ok(blog);
+        } else {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

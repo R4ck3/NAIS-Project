@@ -8,10 +8,15 @@ import org.springframework.data.elasticsearch.annotations.Document;
 public class Blog {
     @Id
     private String id;
+    
     private String authorId;
+
     private String blogId;
+
     private String category;
+
     private String title;
+
     private String description;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")

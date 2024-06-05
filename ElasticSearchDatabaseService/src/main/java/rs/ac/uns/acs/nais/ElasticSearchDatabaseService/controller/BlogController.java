@@ -78,4 +78,25 @@ public class BlogController {
         public List<Blog> getBlogsByAuthorId(@PathVariable String authorId) {
             return blogService.findByAuthorId(authorId);
     }
+
+    @GetMapping("/findByAuthorIdAndCategoryAndTitle")
+        public List<Blog> findByAuthorIdAndCategoryAndTitle(
+                @RequestParam(value = "authorId") String authorId,
+                @RequestParam(value = "category") String category,
+                @RequestParam(value = "title") String title) {
+            return blogService.findByAuthorIdAndCategoryAndTitle(authorId, category, title);
+    }
+
+    @PutMapping("/{id}/updateDescription")
+    public ResponseEntity<String> updateBlogDescription(@PathVariable String id, @RequestBody String newDescription) {
+        ResponseEntity<String> responseEntity;
+        try {
+            ResponseEntity<Blog> response = blogService.updateBlogDescription(id, newDescription.trim());
+            String updatedDescription = response.getBody().getDescription();
+            responseEntity = ResponseEntity.ok().body(updatedDescription);
+        } catch (Exception e) {
+            responseEntity = ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+        return responseEntity;
+    }
 }

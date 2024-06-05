@@ -2,6 +2,7 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service;
 
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Blog;
 
+
 import java.util.List;
 import java.util.Optional;
 
@@ -26,4 +27,7 @@ public interface IBlogService {
     List<Blog> searchByTitleOrDescriptionFuzzy(String searchTerm);
 
     List<Blog> findByAuthorId(String authorId);
+
+    List<Blog> findByAuthorIdAndCategoryAndTitle(String authorId, String category, String title);
+
 }

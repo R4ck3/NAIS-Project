@@ -36,4 +36,7 @@ public interface BlogRepository extends ElasticsearchRepository<Blog, String> {
     @Query("{\"bool\": {\"must\": [{\"match\": {\"authorId\": \"?0\"}}]}}")
     List<Blog> findByAuthorId(String authorId);
 
+    @Query("{\"bool\": {\"must\": [{\"term\": {\"authorId.keyword\": \"?0\"}}, {\"term\": {\"category.keyword\": \"?1\"}}, {\"match\": {\"title\": \"?2\"}}]}}")
+    List<Blog> findByAuthorIdAndCategoryAndTitle(String authorId, String category, String title);
+
 }
