@@ -36,9 +36,9 @@ public interface BlogRepository extends ElasticsearchRepository<Blog, String> {
     @Query("{\"bool\": {\"must\": [{\"match\": {\"authorId\": \"?0\"}}]}}")
     List<Blog> findByAuthorId(String authorId);
 
-    @Query("{\"bool\": {\"must\": [{\"term\": {\"authorId.keyword\": \"?0\"}}, {\"term\": {\"category.keyword\": \"?1\"}}, {\"match\": {\"title\": \"?2\"}}]}}")
+    @Query("{\"bool\": {\"must\": [{\"match\": {\"authorId\": \"?0\"}}, {\"match\": {\"category\": \"?1\"}}, {\"match\": {\"title\": \"?2\"}}]}}")
     List<Blog> findByAuthorIdAndCategoryAndTitle(String authorId, String category, String title);
 
-    @Query("{\"match_all\": {}}, \"sort\": [{\"createdAt\": {\"order\": \"desc\"}}]")
-    List<Blog> findAllOrderByCreatedAtDesc();
+    @Query("{\"bool\": {\"must\": [{\"match\": {\"authorId\": \"?0\"}}, {\"query_string\": {\"query\": \"*?1*\", \"fields\": [\"category\"]}}, {\"query_string\": {\"query\": \"*?2*\", \"fields\": [\"title\"]}}]}}")
+    List<Blog> findByAuthorIdAndCategoryAndTitleNoEM(String authorId, String category, String title);
 }

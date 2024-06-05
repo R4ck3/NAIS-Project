@@ -1,5 +1,6 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
+
 import com.lowagie.text.*;
 import com.lowagie.text.pdf.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.Date;
+import java.util.Collections; 
+import java.util.Comparator;
 
 
 @Service
@@ -35,7 +38,6 @@ public class BlogService implements IBlogService {
     }
 
     public Blog createBlog(Blog blog) {
-        blog.setCreatedAt(new Date());
         return blogRepository.save(blog);
     }
 
@@ -92,6 +94,12 @@ public class BlogService implements IBlogService {
     }
 
     public List<Blog> findAllOrderByCreatedAtDesc() {
-        return blogRepository.findAllOrderByCreatedAtDesc();
+        List<Blog> blogs = blogRepository.findAll();
+        blogs.sort(Comparator.comparing(Blog::getCreatedAt).reversed());
+        return blogs;
+    }
+
+    public List<Blog> findByAuthorIdAndCategoryAndTitleNoEM(String authorId, String category, String title) {
+        return blogRepository.findByAuthorIdAndCategoryAndTitleNoEM(authorId, category, title);
     }
 }

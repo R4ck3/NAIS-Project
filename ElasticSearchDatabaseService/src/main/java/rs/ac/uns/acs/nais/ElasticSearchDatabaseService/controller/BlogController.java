@@ -104,4 +104,12 @@ public class BlogController {
     public List<Blog> findAllOrderByCreatedAtDesc() {
         return blogService.findAllOrderByCreatedAtDesc();
     }
+
+    @GetMapping("/findByAuthorIdAndCategoryAndTitleNoEM")
+        public List<Blog> findByAuthorIdAndCategoryAndTitleNoEM(
+                @RequestParam(value = "authorId") String authorId,
+                @RequestParam(value = "category") String category,
+                @RequestParam(value = "title") String title) {
+            return blogService.findByAuthorIdAndCategoryAndTitleNoEM(authorId, category, title);
+    }
 }
