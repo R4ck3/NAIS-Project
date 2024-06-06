@@ -132,7 +132,19 @@ public class BlogController {
         @RequestParam(value = "authorId") String authorId,
         @RequestParam(value = "startDate") String startDate,
         @RequestParam(value = "endDate") String endDate) {
-            
+
     return blogService.findByDynamicQuery(title, category, description, country, authorId, startDate, endDate);
+    }
+
+    @GetMapping("/findByDynamicQuery2")
+    public List<Blog> findByDynamicQuery2(@RequestParam(value = "title") String title,
+        @RequestParam(value = "category") String category,
+        @RequestParam(value = "description") String description,
+        @RequestParam(value = "country") String country,
+        @RequestParam(value = "authorId") String authorId,
+        @RequestParam(value = "startDate") String startDate,
+        @RequestParam(value = "endDate") String endDate) {
+            
+    return blogService.findByDynamicQuery2(title, category, description, country, authorId, startDate, endDate);
     }
 }

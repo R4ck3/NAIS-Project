@@ -114,4 +114,10 @@ public class BlogService implements IBlogService {
         blogs.sort(Comparator.comparing(Blog::getCreatedAt).reversed());
         return blogs;
     }
+
+    public List<Blog> findByDynamicQuery2(String title, String category, String description, String country, String authorId, String startDate, String endDate) {
+        List<Blog> blogs = blogRepository.findByDynamicQuery2(title, category, description, country, authorId, startDate, endDate);
+        blogs.sort(Comparator.comparing(Blog::getCreatedAt).reversed());
+        return blogs;
+    }
 }

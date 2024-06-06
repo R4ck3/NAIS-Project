@@ -52,4 +52,14 @@ public interface BlogRepository extends ElasticsearchRepository<Blog, String> {
            " {\"term\": {\"authorId\": \"?4\" }}," +
            " {\"range\": {\"createdAt\": {\"gte\": \"?5\", \"lte\": \"?6\" }}}]}}")
     List<Blog> findByDynamicQuery(String title, String category, String description, String country, String authorId, String startDate, String endDate);
+
+    @Query("{\"bool\": {\"must\": [" +
+           "{\"multi_match\": {\"query\": \"?0*\", \"fields\": [\"title\"], \"fuzziness\": \"AUTO\"}}," +
+           "{\"term\": {\"category\": \"?1\"}}," +
+           "{\"match_phrase\": {\"description\": \"?2\"}}," +
+           "{\"multi_match\": {\"query\": \"?3*\", \"fields\": [\"country\"], \"fuzziness\": \"AUTO\"}}," +
+           "{\"term\": {\"authorId\": \"?4\"}}," +
+           "{\"range\": {\"createdAt\": {\"gte\": \"?5\", \"lte\": \"?6\"}}}" +
+         "]}}")
+    List<Blog> findByDynamicQuery2(String title, String category, String description, String country, String authorId, String startDate, String endDate);
 }
