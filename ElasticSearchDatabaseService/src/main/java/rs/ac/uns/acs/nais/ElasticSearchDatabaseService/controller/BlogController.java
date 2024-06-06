@@ -84,6 +84,7 @@ public class BlogController {
                 @RequestParam(value = "authorId") String authorId,
                 @RequestParam(value = "category") String category,
                 @RequestParam(value = "title") String title) {
+
             return blogService.findByAuthorIdAndCategoryAndTitle(authorId, category, title);
     }
 
@@ -107,16 +108,31 @@ public class BlogController {
 
     @GetMapping("/findByAuthorIdAndCategoryAndTitleNoEM")
         public List<Blog> findByAuthorIdAndCategoryAndTitleNoEM(
-                @RequestParam(value = "authorId") String authorId,
-                @RequestParam(value = "category") String category,
-                @RequestParam(value = "title") String title) {
+            @RequestParam(value = "authorId") String authorId,
+            @RequestParam(value = "category") String category,
+            @RequestParam(value = "title") String title) {
+
             return blogService.findByAuthorIdAndCategoryAndTitleNoEM(authorId, category, title);
     }
 
     @GetMapping("/findByCategoryAndDateRange")
-    public List<Blog> findByCategoryAndDateRange(@RequestParam(value = "category") String category,
-                                                 @RequestParam(value = "startDate") String startDate,
-                                                 @RequestParam(value = "endDate") String endDate) {
+    public List<Blog> findByCategoryAndDateRange(
+        @RequestParam(value = "category") String category,
+        @RequestParam(value = "startDate") String startDate,
+        @RequestParam(value = "endDate") String endDate) {
+
         return blogService.findByCategoryAndDateRange(category, startDate, endDate);
+    }
+
+    @GetMapping("/findByDynamicQuery")
+    public List<Blog> findByDynamicQuery(@RequestParam(value = "title") String title,
+        @RequestParam(value = "category") String category,
+        @RequestParam(value = "description") String description,
+        @RequestParam(value = "country") String country,
+        @RequestParam(value = "authorId") String authorId,
+        @RequestParam(value = "startDate") String startDate,
+        @RequestParam(value = "endDate") String endDate) {
+            
+    return blogService.findByDynamicQuery(title, category, description, country, authorId, startDate, endDate);
     }
 }

@@ -35,4 +35,6 @@ public interface IBlogService {
     List<Blog> findAllOrderByCreatedAtDesc();
 
     List<Blog> findByCategoryAndDateRange(String category, String startDate, String endDate);
+
+    List<Blog> findByDynamicQuery(String title, String category, String description, String country, String authorId, String startDate, String endDate);
 }

@@ -17,7 +17,7 @@ public interface BlogRepository extends ElasticsearchRepository<Blog, String> {
 
     void deleteById(String id);
 
-    @Query("{\"term\": {\"_id\": \"?0\"}}")
+    @Query("{\"term\": {\"blogId\": \"?0\"}}")
     Optional<Blog> findById(String id);
 
     List<Blog> findByTitleOrAuthorId(String title, String authorId);
@@ -42,7 +42,14 @@ public interface BlogRepository extends ElasticsearchRepository<Blog, String> {
     @Query("{\"bool\": {\"must\": [{\"match\": {\"authorId\": \"?0\"}}, {\"query_string\": {\"query\": \"*?1*\", \"fields\": [\"category\"]}}, {\"query_string\": {\"query\": \"*?2*\", \"fields\": [\"title\"]}}]}}")
     List<Blog> findByAuthorIdAndCategoryAndTitleNoEM(String authorId, String category, String title);
 
-    @Query("{\"bool\": {\"must\": [{\"term\": {\"category\": \"?0\"}}, {\"range\": {\"createdAt\": {\"gte\": \"?1\", \"lte\": \"?2\"}}}]}}, \"sort\": [{\"createdAt\": {\"order\": \"desc\"}}]")
+    @Query("{\"bool\": {\"must\": [{\"term\": {\"category\": \"?0\"}}, {\"range\": {\"createdAt\": {\"gte\": \"?1\", \"lte\": \"?2\"}}}]}}")
     List<Blog> findByCategoryAndDateRange(String category, String startDate, String endDate);
 
+    @Query("{\"bool\": {\"must\": [{\"match\": {\"title\": \"?0\" }}," +
+           " {\"term\": {\"category\": \"?1\" }}," +
+           " {\"match_phrase\": {\"description\": \"?2\" }}," +
+           " {\"term\": {\"country\": \"?3\" }}," +
+           " {\"term\": {\"authorId\": \"?4\" }}," +
+           " {\"range\": {\"createdAt\": {\"gte\": \"?5\", \"lte\": \"?6\" }}}]}}")
+    List<Blog> findByDynamicQuery(String title, String category, String description, String country, String authorId, String startDate, String endDate);
 }
