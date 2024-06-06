@@ -33,4 +33,6 @@ public interface IBlogService {
     List<Blog> findByAuthorIdAndCategoryAndTitleNoEM(String authorId, String category, String title);
 
     List<Blog> findAllOrderByCreatedAtDesc();
+
+    List<Blog> findByCategoryAndDateRange(String category, String startDate, String endDate);
 }

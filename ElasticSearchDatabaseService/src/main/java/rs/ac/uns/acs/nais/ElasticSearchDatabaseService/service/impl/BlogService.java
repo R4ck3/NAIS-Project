@@ -102,4 +102,8 @@ public class BlogService implements IBlogService {
     public List<Blog> findByAuthorIdAndCategoryAndTitleNoEM(String authorId, String category, String title) {
         return blogRepository.findByAuthorIdAndCategoryAndTitleNoEM(authorId, category, title);
     }
+
+    public List<Blog> findByCategoryAndDateRange(String category, String startDate, String endDate) {
+        return blogRepository.findByCategoryAndDateRange(category, startDate, endDate);
+    }
 }

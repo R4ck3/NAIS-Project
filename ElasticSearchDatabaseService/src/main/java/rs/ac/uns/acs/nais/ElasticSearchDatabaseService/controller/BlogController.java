@@ -112,4 +112,11 @@ public class BlogController {
                 @RequestParam(value = "title") String title) {
             return blogService.findByAuthorIdAndCategoryAndTitleNoEM(authorId, category, title);
     }
+
+    @GetMapping("/findByCategoryAndDateRange")
+    public List<Blog> findByCategoryAndDateRange(@RequestParam(value = "category") String category,
+                                                 @RequestParam(value = "startDate") String startDate,
+                                                 @RequestParam(value = "endDate") String endDate) {
+        return blogService.findByCategoryAndDateRange(category, startDate, endDate);
+    }
 }
