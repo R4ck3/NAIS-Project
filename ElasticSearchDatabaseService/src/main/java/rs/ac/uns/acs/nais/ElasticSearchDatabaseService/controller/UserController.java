@@ -79,4 +79,9 @@ public class UserController {
         Optional<User> user = userService.findUserById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/{id}/fullname")
+    public String getFullName(@PathVariable String id) {
+        return userService.getFullNameById(id);
+    }
 }

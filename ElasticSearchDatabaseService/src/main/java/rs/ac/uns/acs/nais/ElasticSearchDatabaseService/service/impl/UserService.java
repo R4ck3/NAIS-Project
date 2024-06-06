@@ -70,4 +70,9 @@ public class UserService implements IUserService {
     public Optional<User> findUserById(String id) {
         return userRepository.findById(id);
     }
+
+    public String getFullNameById(String id) {
+        User user = userRepository.findById(id).orElse(null);
+        return user != null ? user.getFullName() : null;
+    }
 }

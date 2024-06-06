@@ -69,4 +69,5 @@ public interface BlogRepository extends ElasticsearchRepository<Blog, String> {
     List<Blog> searchByDescriptionPhrasePDF(String phrase, String startDate, String endDate);
 
     
+    
 }

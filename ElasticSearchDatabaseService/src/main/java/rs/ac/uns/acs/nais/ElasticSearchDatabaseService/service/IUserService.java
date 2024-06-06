@@ -26,4 +26,6 @@ public interface IUserService {
     void deleteUserById(String id);
 
     Optional<User> findUserById(String id);  
+
+    String getFullNameById(String id);
 }

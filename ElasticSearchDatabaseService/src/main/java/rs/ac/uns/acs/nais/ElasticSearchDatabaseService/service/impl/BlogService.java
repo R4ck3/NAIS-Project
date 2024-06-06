@@ -13,6 +13,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.UserService;
+
+
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
@@ -33,8 +36,11 @@ public class BlogService implements IBlogService {
 
     private final BlogRepository blogRepository;
 
-    public BlogService(BlogRepository blogRepository) {
+    private final UserService userService;
+
+    public BlogService(BlogRepository blogRepository, UserService userService) {
         this.blogRepository = blogRepository;
+        this.userService = userService;
     }
 
     public Blog createBlog(Blog blog) {
@@ -129,11 +135,12 @@ public class BlogService implements IBlogService {
     public byte[] exportBlogsByDescriptionPhrasePDF(String phrase, String startDate, String endDate, String authorId) throws IOException {
         List<Blog> blogs = blogRepository.searchByDescriptionPhrasePDF(phrase, startDate, endDate);
         List<Blog> blogsByAuthor = blogRepository.findByAuthorId(authorId);
+        String authorFullName = userService.getFullNameById(authorId);
 
-        return generatePdfBytes(blogs, blogsByAuthor, startDate, endDate);
+        return generatePdfBytes(blogs, blogsByAuthor, startDate, endDate, authorFullName);
     }
 
-    private byte[] generatePdfBytes(List<Blog> blogs, List<Blog> blogsByAuthor, String startDate, String endDate) throws IOException {
+    private byte[] generatePdfBytes(List<Blog> blogs, List<Blog> blogsByAuthor, String startDate, String endDate, String authorFullName) throws IOException {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     Document document = new Document();
     document.setMargins(20, 20, 20, 20); 
@@ -188,7 +195,7 @@ public class BlogService implements IBlogService {
     title2.setAlignment(Element.ALIGN_CENTER);
     document.add(title2);
 
-    Paragraph description2 = new Paragraph("Report for blogs created by certain author ", FontFactory.getFont(FontFactory.HELVETICA, 12));
+    Paragraph description2 = new Paragraph("Report for blogs created by author: " + authorFullName, FontFactory.getFont(FontFactory.HELVETICA, 12));
     description2.setAlignment(Element.ALIGN_CENTER);
     document.add(description2);
 
