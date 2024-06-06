@@ -64,9 +64,9 @@ public interface BlogRepository extends ElasticsearchRepository<Blog, String> {
     List<Blog> findByDynamicQuery2(String title, String category, String description, String country, String authorId, String startDate, String endDate);
 
 
-    @Query("{\"bool\": {\"must\": [{\"range\": {\"createdAt\": {\"gte\": \"2022-01-01\", \"lte\": \"2023-12-31\"}}}," +
+    @Query("{\"bool\": {\"must\": [{\"range\": {\"createdAt\": {\"gte\": \"?1\", \"lte\": \"?2\"}}}," +
            " {\"match_phrase\": {\"description\": \"?0\"}}]}}")
-    List<Blog> searchByDescriptionPhrasePDF(String phrase);
+    List<Blog> searchByDescriptionPhrasePDF(String phrase, String startDate, String endDate);
 
     
 }

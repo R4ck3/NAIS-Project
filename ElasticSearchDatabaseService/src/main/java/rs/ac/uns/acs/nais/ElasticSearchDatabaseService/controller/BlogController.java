@@ -149,17 +149,17 @@ public class BlogController {
     }
 
     @GetMapping("/searchByDescriptionPhrasePDF")
-    public List<Blog> searchByDescriptionPhrasePDF(@RequestParam(value = "phrase") String phrase) {
-        return blogService.searchByDescriptionPhrasePDF(phrase);
+    public List<Blog> searchByDescriptionPhrasePDF(@RequestParam(value = "phrase") String phrase, @RequestParam(value = "startDate") String startDate, @RequestParam(value = "endDate") String endDate) {
+        return blogService.searchByDescriptionPhrasePDF(phrase, startDate, endDate);
     }
 
 
     @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> exportPdf(@RequestParam(value = "searchPhrase") String searchPhrase) {
+    public ResponseEntity<byte[]> exportPdf(@RequestParam(value = "searchPhrase") String searchPhrase, @RequestParam(value = "startDate") String startDate, @RequestParam(value = "endDate") String endDate) {
         try {
-            List<Blog> blogs = blogService.searchByDescriptionPhrasePDF(searchPhrase);
+            List<Blog> blogs = blogService.searchByDescriptionPhrasePDF(searchPhrase, startDate, endDate);
 
-            byte[] pdfContents = blogService.exportBlogsByDescriptionPhrasePDF(searchPhrase);
+            byte[] pdfContents = blogService.exportBlogsByDescriptionPhrasePDF(searchPhrase, startDate, endDate);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);

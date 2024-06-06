@@ -122,12 +122,12 @@ public class BlogService implements IBlogService {
     }
 
     @Override
-    public List<Blog> searchByDescriptionPhrasePDF(String phrase) {
-        return blogRepository.searchByDescriptionPhrasePDF(phrase);
+    public List<Blog> searchByDescriptionPhrasePDF(String phrase, String startDate, String endDate) {
+        return blogRepository.searchByDescriptionPhrasePDF(phrase, startDate, endDate);
     }
 
-    public byte[] exportBlogsByDescriptionPhrasePDF(String phrase) throws IOException {
-        List<Blog> blogs = blogRepository.searchByDescriptionPhrasePDF(phrase);
+    public byte[] exportBlogsByDescriptionPhrasePDF(String phrase, String startDate, String endDate) throws IOException {
+        List<Blog> blogs = blogRepository.searchByDescriptionPhrasePDF(phrase, startDate, endDate);
         return generatePdfBytes(blogs);
     }
 
