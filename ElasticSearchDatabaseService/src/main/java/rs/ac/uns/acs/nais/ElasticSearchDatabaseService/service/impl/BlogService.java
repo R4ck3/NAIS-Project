@@ -128,54 +128,61 @@ public class BlogService implements IBlogService {
 
     public byte[] exportBlogsByDescriptionPhrasePDF(String phrase, String startDate, String endDate) throws IOException {
         List<Blog> blogs = blogRepository.searchByDescriptionPhrasePDF(phrase, startDate, endDate);
-        return generatePdfBytes(blogs);
+        return generatePdfBytes(blogs, startDate, endDate);
     }
 
-    private byte[] generatePdfBytes(List<Blog> blogs) throws IOException {
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        Document document = new Document();
+    private byte[] generatePdfBytes(List<Blog> blogs, String startDate, String endDate) throws IOException {
+    ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    Document document = new Document();
+    document.setMargins(20, 20, 20, 20); 
 
-        String filename = "blogs_report_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + ".pdf";
+    String filename = "blogs_report_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + ".pdf";
 
-        PdfWriter.getInstance(document, byteArrayOutputStream);
-        document.open();
+    PdfWriter.getInstance(document, byteArrayOutputStream);
+    document.open();
 
-        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, Font.BOLD);
+    Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, Font.BOLD);
 
-        Paragraph title = new Paragraph("BLOGS REPORT", titleFont);
-        title.setAlignment(Element.ALIGN_CENTER);
-        document.add(title);
+    Paragraph title = new Paragraph("BLOGS REPORT", titleFont);
+    title.setAlignment(Element.ALIGN_CENTER);
+    document.add(title);
 
-        PdfPTable reportTable = new PdfPTable(4);
-        reportTable.setWidthPercentage(100);
+    Paragraph description = new Paragraph("Report for blogs created between " + startDate + " and " + endDate, FontFactory.getFont(FontFactory.HELVETICA, 12));
+    description.setAlignment(Element.ALIGN_CENTER);
+    document.add(description);
 
-        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD);
-        PdfPCell headerCell1 = new PdfPCell(new Paragraph("Title", headerFont));
-        PdfPCell headerCell2 = new PdfPCell(new Paragraph("Description", headerFont));
-        PdfPCell headerCell3 = new PdfPCell(new Paragraph("Category", headerFont));
-        PdfPCell headerCell4 = new PdfPCell(new Paragraph("Created At", headerFont));
+    document.add(new Paragraph("\n"));
 
-        headerCell1.setBackgroundColor(new Color(110, 231, 234, 255));
-        headerCell2.setBackgroundColor(new Color(110, 231, 234, 255));
-        headerCell3.setBackgroundColor(new Color(110, 231, 234, 255));
-        headerCell4.setBackgroundColor(new Color(110, 231, 234, 255));
+    PdfPTable reportTable = new PdfPTable(4);
+    reportTable.setWidthPercentage(100);
 
-        reportTable.addCell(headerCell1);
-        reportTable.addCell(headerCell2);
-        reportTable.addCell(headerCell3);
-        reportTable.addCell(headerCell4);
+    Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD);
+    PdfPCell headerCell1 = new PdfPCell(new Paragraph("Title", headerFont));
+    PdfPCell headerCell2 = new PdfPCell(new Paragraph("Description", headerFont));
+    PdfPCell headerCell3 = new PdfPCell(new Paragraph("Category", headerFont));
+    PdfPCell headerCell4 = new PdfPCell(new Paragraph("Created At", headerFont));
 
-        for (Blog blog : blogs) {
-            reportTable.addCell(blog.getTitle());
-            reportTable.addCell(blog.getDescription());
-            reportTable.addCell(blog.getCategory());
-            reportTable.addCell(blog.getCreatedAt());
-        }
+    headerCell1.setBackgroundColor(new Color(110, 231, 234, 255));
+    headerCell2.setBackgroundColor(new Color(110, 231, 234, 255));
+    headerCell3.setBackgroundColor(new Color(110, 231, 234, 255));
+    headerCell4.setBackgroundColor(new Color(110, 231, 234, 255));
 
-        document.add(reportTable);
-        document.close();
+    reportTable.addCell(headerCell1);
+    reportTable.addCell(headerCell2);
+    reportTable.addCell(headerCell3);
+    reportTable.addCell(headerCell4);
 
-        return byteArrayOutputStream.toByteArray();
+    for (Blog blog : blogs) {
+        reportTable.addCell(blog.getTitle());
+        reportTable.addCell(blog.getDescription());
+        reportTable.addCell(blog.getCategory());
+        reportTable.addCell(blog.getCreatedAt());
     }
+
+    document.add(reportTable);
+    document.close();
+
+    return byteArrayOutputStream.toByteArray();
+}
 
 }
