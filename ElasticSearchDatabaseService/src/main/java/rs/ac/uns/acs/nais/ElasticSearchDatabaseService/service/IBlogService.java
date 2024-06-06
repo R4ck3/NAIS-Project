@@ -42,4 +42,7 @@ public interface IBlogService {
 
     List<Blog> searchByDescriptionPhrasePDF(String phrase, String startDate, String endDate);
 
+    List<Blog> findByCountryAndDateRange(String country, String startDate, String endDate);
+
+    List<Blog> findByAuthorIdAndDateRange(String authorId, String startDate, String endDate);
 }

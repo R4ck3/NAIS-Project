@@ -153,6 +153,24 @@ public class BlogController {
         return blogService.searchByDescriptionPhrasePDF(phrase, startDate, endDate);
     }
 
+    @GetMapping("/getBlogsByCountryAndDateRange")
+    public List<Blog> getBlogsByCountryAndDateRange(
+        @RequestParam(value = "country") String country,
+        @RequestParam(value = "startDate") String startDate,
+        @RequestParam(value = "endDate") String endDate
+    ) {
+        return blogService.findByCountryAndDateRange(country, startDate, endDate);
+    }
+
+    @GetMapping("/getBlogsByAuthorIdAndDateRange")
+    public List<Blog> getBlogsByAuthorIdAndDateRange(
+        @RequestParam(value = "authorId") String authorId,
+        @RequestParam(value = "startDate") String startDate,
+        @RequestParam(value = "endDate") String endDate
+    ) {
+        return blogService.findByAuthorIdAndDateRange(authorId, startDate, endDate);
+    }
+
 
     @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> exportPdf(@RequestParam(value = "searchPhrase") String searchPhrase, @RequestParam(value = "startDate") String startDate, @RequestParam(value = "endDate") String endDate, @RequestParam(value = "authorId") String authorId) {
@@ -173,4 +191,26 @@ public class BlogController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @GetMapping(value = "/export-pdf2", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> exportPdf2(@RequestParam(value = "country") String country, @RequestParam(value = "startDate") String startDate, @RequestParam(value = "endDate") String endDate, @RequestParam(value = "authorId") String authorId) {
+        try {
+            List<Blog> blogsByCountry = blogService.findByCountryAndDateRange(country, startDate, endDate);
+
+            byte[] pdfContents = blogService.exportBlogsByCountryAndAuthorPDF(country, startDate, endDate, authorId);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "blogs_report.pdf");
+
+            return ResponseEntity.ok()
+                                 .headers(headers)
+                                 .body(pdfContents);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }
+
+
