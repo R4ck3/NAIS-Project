@@ -120,4 +120,62 @@ public class BlogService implements IBlogService {
         blogs.sort(Comparator.comparing(Blog::getCreatedAt).reversed());
         return blogs;
     }
+
+    @Override
+    public List<Blog> searchByDescriptionPhrasePDF(String phrase) {
+        return blogRepository.searchByDescriptionPhrasePDF(phrase);
+    }
+
+    public byte[] exportBlogsByDescriptionPhrasePDF(String phrase) throws IOException {
+        List<Blog> blogs = blogRepository.searchByDescriptionPhrasePDF(phrase);
+        return generatePdfBytes(blogs);
+    }
+
+    private byte[] generatePdfBytes(List<Blog> blogs) throws IOException {
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        Document document = new Document();
+
+        String filename = "blogs_report_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + ".pdf";
+
+        PdfWriter.getInstance(document, byteArrayOutputStream);
+        document.open();
+
+        Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, Font.BOLD);
+
+        Paragraph title = new Paragraph("BLOGS REPORT", titleFont);
+        title.setAlignment(Element.ALIGN_CENTER);
+        document.add(title);
+
+        PdfPTable reportTable = new PdfPTable(4);
+        reportTable.setWidthPercentage(100);
+
+        Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD);
+        PdfPCell headerCell1 = new PdfPCell(new Paragraph("Title", headerFont));
+        PdfPCell headerCell2 = new PdfPCell(new Paragraph("Description", headerFont));
+        PdfPCell headerCell3 = new PdfPCell(new Paragraph("Category", headerFont));
+        PdfPCell headerCell4 = new PdfPCell(new Paragraph("Created At", headerFont));
+
+        headerCell1.setBackgroundColor(new Color(110, 231, 234, 255));
+        headerCell2.setBackgroundColor(new Color(110, 231, 234, 255));
+        headerCell3.setBackgroundColor(new Color(110, 231, 234, 255));
+        headerCell4.setBackgroundColor(new Color(110, 231, 234, 255));
+
+        reportTable.addCell(headerCell1);
+        reportTable.addCell(headerCell2);
+        reportTable.addCell(headerCell3);
+        reportTable.addCell(headerCell4);
+
+        for (Blog blog : blogs) {
+            reportTable.addCell(blog.getTitle());
+            reportTable.addCell(blog.getDescription());
+            reportTable.addCell(blog.getCategory());
+            reportTable.addCell(blog.getCreatedAt());
+        }
+
+        document.add(reportTable);
+        document.close();
+
+        return byteArrayOutputStream.toByteArray();
+    }
+
 }

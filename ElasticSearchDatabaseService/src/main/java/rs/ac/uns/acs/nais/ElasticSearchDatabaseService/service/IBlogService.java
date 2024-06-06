@@ -40,4 +40,6 @@ public interface IBlogService {
 
     List<Blog> findByDynamicQuery2(String title, String category, String description, String country, String authorId, String startDate, String endDate);
 
+    List<Blog> searchByDescriptionPhrasePDF(String phrase); 
+
 }

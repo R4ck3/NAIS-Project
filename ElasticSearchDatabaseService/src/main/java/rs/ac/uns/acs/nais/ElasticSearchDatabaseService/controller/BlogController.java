@@ -147,4 +147,30 @@ public class BlogController {
             
     return blogService.findByDynamicQuery2(title, category, description, country, authorId, startDate, endDate);
     }
+
+    @GetMapping("/searchByDescriptionPhrasePDF")
+    public List<Blog> searchByDescriptionPhrasePDF(@RequestParam(value = "phrase") String phrase) {
+        return blogService.searchByDescriptionPhrasePDF(phrase);
+    }
+
+
+    @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    public ResponseEntity<byte[]> exportPdf(@RequestParam(value = "searchPhrase") String searchPhrase) {
+        try {
+            List<Blog> blogs = blogService.searchByDescriptionPhrasePDF(searchPhrase);
+
+            byte[] pdfContents = blogService.exportBlogsByDescriptionPhrasePDF(searchPhrase);
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData("attachment", "blogs_report.pdf");
+
+            return ResponseEntity.ok()
+                                 .headers(headers)
+                                 .body(pdfContents);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
 }
