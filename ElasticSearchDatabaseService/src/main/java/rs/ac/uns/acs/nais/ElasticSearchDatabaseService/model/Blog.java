@@ -13,20 +13,27 @@ public class Blog {
     @Id
     private String id;
     
+    @Field(type=FieldType.Keyword, name = "authorId")
     private String authorId;
 
+    @Field(type=FieldType.Keyword, name = "blogId")
     private String blogId;
 
+    @Field(type=FieldType.Keyword, name = "category")
     private String category;
 
+    @Field(type=FieldType.Text, name = "title")
     private String title;
 
+    @Field(type=FieldType.Text, name = "description")
     private String description;
 
+    @Field(type=FieldType.Keyword, name = "country")
     private String country;
 
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    @Field(type=FieldType.Keyword, name = "createdAt")
     private String createdAt;
 
     public String getId() {
