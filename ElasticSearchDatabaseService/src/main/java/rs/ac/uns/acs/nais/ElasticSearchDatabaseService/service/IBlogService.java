@@ -10,6 +10,8 @@ public interface IBlogService {
 
     Blog createBlog(Blog blog);
 
+    Blog updateBlog(String id, Blog updatedBlog);
+
     List<Blog> findAll();
 
     void deleteBlogById(String id);

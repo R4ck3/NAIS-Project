@@ -43,6 +43,24 @@ public class BlogService implements IBlogService {
         this.userService = userService;
     }
 
+     public Blog updateBlog(String blogId, Blog updatedBlog) {
+        Optional<Blog> existingBlogOptional = blogRepository.findById(blogId);
+        if (existingBlogOptional.isPresent()) {
+            Blog existingBlog = existingBlogOptional.get();
+            
+            existingBlog.setAuthorId(updatedBlog.getAuthorId());
+            existingBlog.setCategory(updatedBlog.getCategory());
+            existingBlog.setTitle(updatedBlog.getTitle());
+            existingBlog.setDescription(updatedBlog.getDescription());
+            existingBlog.setCountry(updatedBlog.getCountry());
+            existingBlog.setCreatedAt(updatedBlog.getCreatedAt());
+            
+            return blogRepository.save(existingBlog);
+        } else {
+            return null;
+        }
+    }
+
     public Blog createBlog(Blog blog) {
         return blogRepository.save(blog);
     }

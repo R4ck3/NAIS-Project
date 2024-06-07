@@ -25,6 +25,12 @@ public class BlogController {
         this.blogService = blogService;
     }
 
+    @PutMapping("/updateBlog/{id}")
+    public ResponseEntity<Blog> updateBlog(@PathVariable String id, @RequestBody Blog updatedBlog) {
+        Blog blog = blogService.updateBlog(id, updatedBlog);
+        return ResponseEntity.ok(blog);
+    }
+
     @PostMapping("/createBlog")
     public Blog createBlog(@RequestBody Blog blog) {
         return blogService.createBlog(blog);
@@ -88,11 +94,11 @@ public class BlogController {
             return blogService.findByAuthorIdAndCategoryAndTitle(authorId, category, title);
     }
 
-    @PutMapping("/{id}/updateDescription")
-    public ResponseEntity<String> updateBlogDescription(@PathVariable String id, @RequestBody String newDescription) {
+    @PutMapping("/{blogId}/updateDescription")
+    public ResponseEntity<String> updateBlogDescription(@PathVariable String blogId, @RequestBody String newDescription) {
         ResponseEntity<String> responseEntity;
         try {
-            ResponseEntity<Blog> response = blogService.updateBlogDescription(id, newDescription.trim());
+            ResponseEntity<Blog> response = blogService.updateBlogDescription(blogId, newDescription.trim());
             String updatedDescription = response.getBody().getDescription();
             responseEntity = ResponseEntity.ok().body(updatedDescription);
         } catch (Exception e) {
