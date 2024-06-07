@@ -78,4 +78,7 @@ public interface BlogRepository extends ElasticsearchRepository<Blog, String> {
     @Query("{\"bool\": {\"must\": [{\"match\": {\"authorId\": \"?0\"}}, {\"range\": {\"createdAt\": {\"gte\": \"?1\", \"lte\": \"?2\"}}}]}}")
     List<Blog> findByAuthorIdAndDateRange(String authorId, String startDate, String endDate);
     
+    @Query("{\"bool\": {\"must\": [{\"term\": {\"category\": \"?0\"}}, {\"range\": {\"createdAt\": {\"gte\": \"?1\", \"lte\": \"?2\", \"format\": \"yyyy-MM-dd\"}}}]}}")
+    List<Blog> findBlogsByCategoryAndDateRange(String category, String startDate, String endDate);
+
 }

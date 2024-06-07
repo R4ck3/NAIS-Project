@@ -140,18 +140,23 @@ public class BlogService implements IBlogService {
         return blogRepository.findByAuthorIdAndDateRange(authorId, startDate, endDate);
     }
 
-    public byte[] exportBlogsByDescriptionPhrasePDF(String phrase, String startDate, String endDate, String authorId) throws IOException {
-        List<Blog> blogs = blogRepository.searchByDescriptionPhrasePDF(phrase, startDate, endDate);
-        List<Blog> blogsByAuthor = blogRepository.findByAuthorId(authorId);
-        String authorFullName = userService.getFullNameById(authorId);
-
-        return generatePdfBytes(blogs, blogsByAuthor, startDate, endDate, authorFullName);
+    public List<Blog> findBlogsByCategoryAndDateRange(String category, String startDate, String endDate) {
+        return blogRepository.findBlogsByCategoryAndDateRange(category, startDate, endDate);
     }
 
-    private byte[] generatePdfBytes(List<Blog> blogs, List<Blog> blogsByAuthor, String startDate, String endDate, String authorFullName) throws IOException {
+    public byte[] exportPDF1(String phrase, String startDate, String endDate, String authorId, String category) throws IOException {
+        List<Blog> blogs = blogRepository.searchByDescriptionPhrasePDF(phrase, startDate, endDate);
+        List<Blog> blogsByAuthor = blogRepository.findByAuthorId(authorId);
+        List<Blog> blogsByCategory = blogRepository.findBlogsByCategoryAndDateRange(category, startDate, endDate);
+        String authorFullName = userService.getFullNameById(authorId);
+
+        return generatePdfBytes(blogs, blogsByAuthor, blogsByCategory, startDate, endDate, authorFullName, category);
+    }
+
+    private byte[] generatePdfBytes(List<Blog> blogs, List<Blog> blogsByAuthor, List<Blog> blogsByCategory, String startDate, String endDate, String authorFullName, String category) throws IOException {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
     Document document = new Document();
-    document.setMargins(20, 20, 20, 20); 
+    document.setMargins(40, 40, 40, 40); 
 
     String filename = "blogs_report_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + ".pdf";
 
@@ -218,10 +223,10 @@ public class BlogService implements IBlogService {
     PdfPCell headerCell32 = new PdfPCell(new Paragraph("Category", headerFont2));
     PdfPCell headerCell42 = new PdfPCell(new Paragraph("Created At", headerFont2));
 
-    headerCell12.setBackgroundColor(new Color(110, 231, 234, 255));
-    headerCell22.setBackgroundColor(new Color(110, 231, 234, 255));
-    headerCell32.setBackgroundColor(new Color(110, 231, 234, 255));
-    headerCell42.setBackgroundColor(new Color(110, 231, 234, 255));
+    headerCell12.setBackgroundColor(new Color(255, 0, 0, 255));
+    headerCell22.setBackgroundColor(new Color(255, 0, 0, 255));
+    headerCell32.setBackgroundColor(new Color(255, 0, 0, 255));
+    headerCell42.setBackgroundColor(new Color(255, 0, 0, 255));
 
     reportTable2.addCell(headerCell12);
     reportTable2.addCell(headerCell22);
@@ -236,6 +241,45 @@ public class BlogService implements IBlogService {
     }
 
     document.add(reportTable2);
+
+
+    Paragraph title3 = new Paragraph("BLOGS REPORT BY CATEGORY", titleFont);
+    title3.setAlignment(Element.ALIGN_CENTER);
+    document.add(title3);
+
+    Paragraph description3 = new Paragraph("Report for blogs by category: " + category + " created between " + startDate + " and " + endDate , FontFactory.getFont(FontFactory.HELVETICA, 12));
+    description3.setAlignment(Element.ALIGN_CENTER);
+    document.add(description3);
+
+    document.add(new Paragraph("\n"));
+
+    PdfPTable reportTable3 = new PdfPTable(4);
+    reportTable3.setWidthPercentage(100);
+
+    Font headerFont3 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD);
+    PdfPCell headerCell13 = new PdfPCell(new Paragraph("Title", headerFont3));
+    PdfPCell headerCell23 = new PdfPCell(new Paragraph("Description", headerFont3));
+    PdfPCell headerCell33 = new PdfPCell(new Paragraph("Category", headerFont3));
+    PdfPCell headerCell43 = new PdfPCell(new Paragraph("Created At", headerFont3));
+
+    headerCell13.setBackgroundColor(new Color(0, 255, 0, 255));
+    headerCell23.setBackgroundColor(new Color(0, 255, 0, 255));
+    headerCell33.setBackgroundColor(new Color(0, 255, 0, 255));
+    headerCell43.setBackgroundColor(new Color(0, 255, 0, 255));
+
+    reportTable3.addCell(headerCell13);
+    reportTable3.addCell(headerCell23);
+    reportTable3.addCell(headerCell33);
+    reportTable3.addCell(headerCell43);
+
+    for (Blog blog : blogsByCategory) {
+        reportTable3.addCell(blog.getTitle());
+        reportTable3.addCell(blog.getDescription());
+        reportTable3.addCell(blog.getCategory());
+        reportTable3.addCell(blog.getCreatedAt());
+    }
+
+    document.add(reportTable3);
 
     document.close();
 
@@ -355,8 +399,6 @@ public class BlogService implements IBlogService {
 
     return byteArrayOutputStream.toByteArray();
 }
-
-
 
     public byte[] exportBlogsByCountryAndAuthorPDF(String country, String startDate, String endDate, String authorId) throws IOException {
         List<Blog> blogsByCountry = blogRepository.findByCountryAndDateRange(country, startDate, endDate);

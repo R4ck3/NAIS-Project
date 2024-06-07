@@ -45,4 +45,6 @@ public interface IBlogService {
     List<Blog> findByCountryAndDateRange(String country, String startDate, String endDate);
 
     List<Blog> findByAuthorIdAndDateRange(String authorId, String startDate, String endDate);
+
+    List<Blog> findBlogsByCategoryAndDateRange(String category, String startDate, String endDate);
 }

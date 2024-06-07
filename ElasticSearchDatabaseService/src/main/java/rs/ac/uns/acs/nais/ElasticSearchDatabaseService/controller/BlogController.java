@@ -171,13 +171,22 @@ public class BlogController {
         return blogService.findByAuthorIdAndDateRange(authorId, startDate, endDate);
     }
 
+    @GetMapping("/findBlogsByCategoryAndDateRange")
+    public List<Blog> findBlogsByCategoryAndDateRange(
+        @RequestParam(value = "category") String category,
+        @RequestParam(value = "startDate") String startDate,
+        @RequestParam(value = "endDate") String endDate
+    ) {
+        return blogService.findBlogsByCategoryAndDateRange(category, startDate, endDate);
+    }
+
 
     @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> exportPdf(@RequestParam(value = "searchPhrase") String searchPhrase, @RequestParam(value = "startDate") String startDate, @RequestParam(value = "endDate") String endDate, @RequestParam(value = "authorId") String authorId) {
+    public ResponseEntity<byte[]> exportPdf(@RequestParam(value = "searchPhrase") String searchPhrase, @RequestParam(value = "startDate") String startDate, @RequestParam(value = "endDate") String endDate, @RequestParam(value = "authorId") String authorId, @RequestParam(value = "category") String category) {
         try {
             List<Blog> blogs = blogService.searchByDescriptionPhrasePDF(searchPhrase, startDate, endDate);
 
-            byte[] pdfContents = blogService.exportBlogsByDescriptionPhrasePDF(searchPhrase, startDate, endDate, authorId);
+            byte[] pdfContents = blogService.exportPDF1(searchPhrase, startDate, endDate, authorId, category);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
