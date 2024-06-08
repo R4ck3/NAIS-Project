@@ -209,11 +209,11 @@ public class BlogController {
     }
 
     @GetMapping(value = "/export-pdf2", produces = MediaType.APPLICATION_PDF_VALUE)
-    public ResponseEntity<byte[]> exportPdf2(@RequestParam(value = "country") String country, @RequestParam(value = "startDate") String startDate, @RequestParam(value = "endDate") String endDate, @RequestParam(value = "authorId") String authorId) {
+    public ResponseEntity<byte[]> exportPdf2(@RequestParam(value = "country") String country, @RequestParam(value = "category") String category, @RequestParam(value = "startDate") String startDate, @RequestParam(value = "endDate") String endDate, @RequestParam(value = "authorId") String authorId) {
         try {
             List<Blog> blogsByCountry = blogService.findByCountryAndDateRange(country, startDate, endDate);
 
-            byte[] pdfContents = blogService.exportBlogsByCountryAndAuthorPDF(country, startDate, endDate, authorId);
+            byte[] pdfContents = blogService.exportBlogsByCountryAndAuthorPDF(country, category, startDate, endDate, authorId);
 
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.APPLICATION_PDF);
