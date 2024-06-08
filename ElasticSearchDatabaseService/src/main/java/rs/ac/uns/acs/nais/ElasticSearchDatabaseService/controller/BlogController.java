@@ -8,7 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Blog;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.BlogService;
-
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO;
+import java.util.stream.Collectors;
 import java.io.IOException;
 
 import java.util.List;
@@ -122,7 +123,7 @@ public class BlogController {
     }
 
     @GetMapping("/findByCategoryAndDateRange")
-    public List<Blog> findByCategoryAndDateRange(
+    public BlogDTO findByCategoryAndDateRange(
         @RequestParam(value = "category") String category,
         @RequestParam(value = "startDate") String startDate,
         @RequestParam(value = "endDate") String endDate) {

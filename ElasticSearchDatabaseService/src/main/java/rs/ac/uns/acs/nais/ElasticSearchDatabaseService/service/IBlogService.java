@@ -1,8 +1,9 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service;
 
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Blog;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO;
 
-
+import java.util.stream.Collectors;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,7 +37,7 @@ public interface IBlogService {
 
     List<Blog> findAllOrderByCreatedAtDesc();
 
-    List<Blog> findByCategoryAndDateRange(String category, String startDate, String endDate);
+    BlogDTO findByCategoryAndDateRange(String category, String startDate, String endDate);
 
     List<Blog> findByDynamicQuery(String title, String category, String description, String country, String authorId, String startDate, String endDate);
 

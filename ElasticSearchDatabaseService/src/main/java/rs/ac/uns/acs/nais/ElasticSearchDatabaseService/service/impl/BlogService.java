@@ -6,6 +6,7 @@ import com.lowagie.text.pdf.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Blog;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.BlogRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.IBlogService;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,7 +17,7 @@ import org.springframework.http.ResponseEntity;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.UserService;
 
 
-
+import java.util.stream.Collectors;
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
@@ -29,7 +30,7 @@ import java.util.Optional;
 import java.util.Date;
 import java.util.Collections; 
 import java.util.Comparator;
-
+import java.util.Map;
 
 @Service
 public class BlogService implements IBlogService {
@@ -127,10 +128,36 @@ public class BlogService implements IBlogService {
         return blogRepository.findByAuthorIdAndCategoryAndTitleNoEM(authorId, category, title);
     }
 
-    public List<Blog> findByCategoryAndDateRange(String category, String startDate, String endDate) {
+    private Map<String, Long> countByCountry(List<Blog> blogs) {
+        return blogs.stream()
+                .collect(Collectors.groupingBy(Blog::getCountry, Collectors.counting()));
+    }
+
+    private Map<String, Long> countByCategory(List<Blog> blogs) {
+        return blogs.stream()
+                .collect(Collectors.groupingBy(Blog::getCategory, Collectors.counting()));
+    }
+
+    // public List<Blog> findByCategoryAndDateRange(String category, String startDate, String endDate) {
+    //     List<Blog> blogs = blogRepository.findByCategoryAndDateRange(category, startDate, endDate);
+    //     blogs.sort(Comparator.comparing(Blog::getCreatedAt).reversed());
+    //     return blogs;
+    // }
+
+    public BlogDTO findByCategoryAndDateRange(String category, String startDate, String endDate) {
         List<Blog> blogs = blogRepository.findByCategoryAndDateRange(category, startDate, endDate);
         blogs.sort(Comparator.comparing(Blog::getCreatedAt).reversed());
-        return blogs;
+
+        Map<String, Long> countryCounts = countByCountry(blogs);
+
+        Map<String, Long> categoryCounts = countByCategory(blogs);
+
+        BlogDTO blogDTO = new BlogDTO();
+        blogDTO.setBlogs(blogs);
+        blogDTO.setCountryCounts(countryCounts);
+        blogDTO.setCategoryCounts(categoryCounts);
+
+        return blogDTO;
     }
 
     public List<Blog> findByDynamicQuery(String title, String category, String description, String country, String authorId, String startDate, String endDate) {
