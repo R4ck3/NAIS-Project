@@ -10,6 +10,8 @@ import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Blog;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.BlogService;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO2;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO3;
+
 import java.util.stream.Collectors;
 import java.io.IOException;
 
@@ -85,6 +87,11 @@ public class BlogController {
     @GetMapping("/author/{authorId}")
         public List<Blog> getBlogsByAuthorId(@PathVariable String authorId) {
             return blogService.findByAuthorId(authorId);
+    }
+
+    @GetMapping("/author-with-users/{authorId}")
+        public BlogDTO3 findByAuthorIdWithUsers(@PathVariable String authorId) {
+            return blogService.findByAuthorIdWithUsers(authorId);
     }
 
     @GetMapping("/findByAuthorIdAndCategoryAndTitle")

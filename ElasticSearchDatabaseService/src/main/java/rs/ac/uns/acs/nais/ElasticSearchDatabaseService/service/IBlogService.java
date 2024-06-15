@@ -3,6 +3,7 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Blog;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO2;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO3;
 
 
 import java.util.stream.Collectors;

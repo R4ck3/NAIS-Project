@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Blog;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO2;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO3;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.BlogRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.IBlogService;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,6 +17,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.UserService;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.User;
+
 
 
 import java.util.stream.Collectors;
@@ -117,6 +120,25 @@ public class BlogService implements IBlogService {
 
     public List<Blog> findByAuthorId(String authorId) {
         return blogRepository.findByAuthorId(authorId);
+    }
+
+    public BlogDTO3 findByAuthorIdWithUsers(String authorId){
+        Optional<User> userOptional = userService.findUserById(authorId);
+
+        if (userOptional.isPresent()){
+            User user = userOptional.get();
+            List<Blog> blogs = blogRepository.findByAuthorId(authorId);
+            BlogDTO3 blogDto3 = new BlogDTO3();
+            blogDto3.setBlogs(blogs);
+            blogDto3.setUserId(authorId);
+            blogDto3.setFullName(user.getFullName());
+            blogDto3.setUsername(user.getUsername());;
+            blogDto3.setEmail(user.getEmail());
+
+            return blogDto3;
+        } else {
+            return null;
+        }
     }
 
     public List<Blog> findByAuthorIdAndCategoryAndTitle(String authorId, String category, String title) {
