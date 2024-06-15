@@ -196,11 +196,29 @@ public class BlogController {
     }
 
 
+    // @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
+    // public ResponseEntity<byte[]> exportPdf(@RequestParam(value = "searchPhrase") String searchPhrase, @RequestParam(value = "startDate") String startDate, @RequestParam(value = "endDate") String endDate, @RequestParam(value = "authorId") String authorId, @RequestParam(value = "category") String category) {
+    //     try {
+    //         List<Blog> blogs = blogService.searchByDescriptionPhrasePDF(searchPhrase, startDate, endDate);
+
+    //         byte[] pdfContents = blogService.exportPDF1(searchPhrase, startDate, endDate, authorId, category);
+
+    //         HttpHeaders headers = new HttpHeaders();
+    //         headers.setContentType(MediaType.APPLICATION_PDF);
+    //         headers.setContentDispositionFormData("attachment", "blogs_report.pdf");
+
+    //         return ResponseEntity.ok()
+    //                              .headers(headers)
+    //                              .body(pdfContents);
+    //     } catch (IOException e) {
+    //         e.printStackTrace();
+    //         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+    //     }
+    // }
+
     @GetMapping(value = "/export-pdf", produces = MediaType.APPLICATION_PDF_VALUE)
     public ResponseEntity<byte[]> exportPdf(@RequestParam(value = "searchPhrase") String searchPhrase, @RequestParam(value = "startDate") String startDate, @RequestParam(value = "endDate") String endDate, @RequestParam(value = "authorId") String authorId, @RequestParam(value = "category") String category) {
         try {
-            List<Blog> blogs = blogService.searchByDescriptionPhrasePDF(searchPhrase, startDate, endDate);
-
             byte[] pdfContents = blogService.exportPDF1(searchPhrase, startDate, endDate, authorId, category);
 
             HttpHeaders headers = new HttpHeaders();

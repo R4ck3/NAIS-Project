@@ -210,19 +210,162 @@ public class BlogService implements IBlogService {
         return blogRepository.findBlogsByCategoryAndDateRange(category, startDate, endDate);
     }
 
+    // public byte[] exportPDF1(String phrase, String startDate, String endDate, String authorId, String category) throws IOException {
+    //     List<Blog> blogs = blogRepository.searchByDescriptionPhrasePDF(phrase, startDate, endDate);
+    //     List<Blog> blogsByAuthor = blogRepository.findByAuthorId(authorId);
+    //     List<Blog> blogsByCategory = blogRepository.findBlogsByCategoryAndDateRange(category, startDate, endDate);
+    //     String authorFullName = userService.getFullNameById(authorId);
+
+    //     return generatePdfBytes(blogs, blogsByAuthor, blogsByCategory, startDate, endDate, authorFullName, category);
+    // }
+
+
     public byte[] exportPDF1(String phrase, String startDate, String endDate, String authorId, String category) throws IOException {
-        List<Blog> blogs = blogRepository.searchByDescriptionPhrasePDF(phrase, startDate, endDate);
+        BlogDTO2 blogDTO2 = searchByDescriptionPhraseWithAggs(phrase);
         List<Blog> blogsByAuthor = blogRepository.findByAuthorId(authorId);
         List<Blog> blogsByCategory = blogRepository.findBlogsByCategoryAndDateRange(category, startDate, endDate);
         String authorFullName = userService.getFullNameById(authorId);
 
-        return generatePdfBytes(blogs, blogsByAuthor, blogsByCategory, startDate, endDate, authorFullName, category);
+        return generatePdfBytes(blogDTO2, blogsByAuthor, blogsByCategory, startDate, endDate, authorFullName, category);
     }
 
-    private byte[] generatePdfBytes(List<Blog> blogs, List<Blog> blogsByAuthor, List<Blog> blogsByCategory, String startDate, String endDate, String authorFullName, String category) throws IOException {
+    // private byte[] generatePdfBytes(List<Blog> blogs, List<Blog> blogsByAuthor, List<Blog> blogsByCategory, String startDate, String endDate, String authorFullName, String category) throws IOException {
+    // ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+    // Document document = new Document();
+    // document.setMargins(40, 40, 40, 40); 
+
+    // String filename = "blogs_report_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + ".pdf";
+
+    // PdfWriter.getInstance(document, byteArrayOutputStream);
+    // document.open();
+
+    // Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, Font.BOLD);
+
+    // Paragraph title = new Paragraph("BLOGS REPORT", titleFont);
+    // title.setAlignment(Element.ALIGN_CENTER);
+    // document.add(title);
+
+    // Paragraph description = new Paragraph("Report for blogs created between " + startDate + " and " + endDate, FontFactory.getFont(FontFactory.HELVETICA, 12));
+    // description.setAlignment(Element.ALIGN_CENTER);
+    // document.add(description);
+
+    // document.add(new Paragraph("\n"));
+
+    // PdfPTable reportTable = new PdfPTable(4);
+    // reportTable.setWidthPercentage(100);
+
+    // Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD);
+    // PdfPCell headerCell1 = new PdfPCell(new Paragraph("Title", headerFont));
+    // PdfPCell headerCell2 = new PdfPCell(new Paragraph("Description", headerFont));
+    // PdfPCell headerCell3 = new PdfPCell(new Paragraph("Category", headerFont));
+    // PdfPCell headerCell4 = new PdfPCell(new Paragraph("Created At", headerFont));
+
+    // headerCell1.setBackgroundColor(new Color(110, 231, 234, 255));
+    // headerCell2.setBackgroundColor(new Color(110, 231, 234, 255));
+    // headerCell3.setBackgroundColor(new Color(110, 231, 234, 255));
+    // headerCell4.setBackgroundColor(new Color(110, 231, 234, 255));
+
+    // reportTable.addCell(headerCell1);
+    // reportTable.addCell(headerCell2);
+    // reportTable.addCell(headerCell3);
+    // reportTable.addCell(headerCell4);
+
+    // for (Blog blog : blogs) {
+    //     reportTable.addCell(blog.getTitle());
+    //     reportTable.addCell(blog.getDescription());
+    //     reportTable.addCell(blog.getCategory());
+    //     reportTable.addCell(blog.getCreatedAt());
+    // }
+
+    // document.add(reportTable);
+
+
+    // Paragraph title2 = new Paragraph("BLOGS REPORT BY AUTHOR", titleFont);
+    // title2.setAlignment(Element.ALIGN_CENTER);
+    // document.add(title2);
+
+    // Paragraph description2 = new Paragraph("Report for blogs created by author: " + authorFullName, FontFactory.getFont(FontFactory.HELVETICA, 12));
+    // description2.setAlignment(Element.ALIGN_CENTER);
+    // document.add(description2);
+
+    // document.add(new Paragraph("\n"));
+
+    // PdfPTable reportTable2 = new PdfPTable(4);
+    // reportTable2.setWidthPercentage(100);
+
+    // Font headerFont2 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD);
+    // PdfPCell headerCell12 = new PdfPCell(new Paragraph("Title", headerFont2));
+    // PdfPCell headerCell22 = new PdfPCell(new Paragraph("Description", headerFont2));
+    // PdfPCell headerCell32 = new PdfPCell(new Paragraph("Category", headerFont2));
+    // PdfPCell headerCell42 = new PdfPCell(new Paragraph("Created At", headerFont2));
+
+    // headerCell12.setBackgroundColor(new Color(255, 0, 0, 255));
+    // headerCell22.setBackgroundColor(new Color(255, 0, 0, 255));
+    // headerCell32.setBackgroundColor(new Color(255, 0, 0, 255));
+    // headerCell42.setBackgroundColor(new Color(255, 0, 0, 255));
+
+    // reportTable2.addCell(headerCell12);
+    // reportTable2.addCell(headerCell22);
+    // reportTable2.addCell(headerCell32);
+    // reportTable2.addCell(headerCell42);
+
+    // for (Blog blog : blogsByAuthor) {
+    //     reportTable2.addCell(blog.getTitle());
+    //     reportTable2.addCell(blog.getDescription());
+    //     reportTable2.addCell(blog.getCategory());
+    //     reportTable2.addCell(blog.getCreatedAt());
+    // }
+
+    // document.add(reportTable2);
+
+
+    // Paragraph title3 = new Paragraph("BLOGS REPORT BY CATEGORY", titleFont);
+    // title3.setAlignment(Element.ALIGN_CENTER);
+    // document.add(title3);
+
+    // Paragraph description3 = new Paragraph("Report for blogs by category: " + category + " created between " + startDate + " and " + endDate , FontFactory.getFont(FontFactory.HELVETICA, 12));
+    // description3.setAlignment(Element.ALIGN_CENTER);
+    // document.add(description3);
+
+    // document.add(new Paragraph("\n"));
+
+    // PdfPTable reportTable3 = new PdfPTable(4);
+    // reportTable3.setWidthPercentage(100);
+
+    // Font headerFont3 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD);
+    // PdfPCell headerCell13 = new PdfPCell(new Paragraph("Title", headerFont3));
+    // PdfPCell headerCell23 = new PdfPCell(new Paragraph("Description", headerFont3));
+    // PdfPCell headerCell33 = new PdfPCell(new Paragraph("Category", headerFont3));
+    // PdfPCell headerCell43 = new PdfPCell(new Paragraph("Created At", headerFont3));
+
+    // headerCell13.setBackgroundColor(new Color(0, 255, 0, 255));
+    // headerCell23.setBackgroundColor(new Color(0, 255, 0, 255));
+    // headerCell33.setBackgroundColor(new Color(0, 255, 0, 255));
+    // headerCell43.setBackgroundColor(new Color(0, 255, 0, 255));
+
+    // reportTable3.addCell(headerCell13);
+    // reportTable3.addCell(headerCell23);
+    // reportTable3.addCell(headerCell33);
+    // reportTable3.addCell(headerCell43);
+
+    // for (Blog blog : blogsByCategory) {
+    //     reportTable3.addCell(blog.getTitle());
+    //     reportTable3.addCell(blog.getDescription());
+    //     reportTable3.addCell(blog.getCategory());
+    //     reportTable3.addCell(blog.getCreatedAt());
+    // }
+
+    // document.add(reportTable3);
+
+    // document.close();
+
+    // return byteArrayOutputStream.toByteArray();
+    // }
+
+    private byte[] generatePdfBytes(BlogDTO2 blogDTO2, List<Blog> blogsByAuthor, List<Blog> blogsByCategory, String startDate, String endDate, String authorFullName, String category) throws IOException {
     ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-    Document document = new Document();
-    document.setMargins(40, 40, 40, 40); 
+    Document document = new Document(PageSize.A4.rotate());
+    document.setMargins(20, 20, 20, 20);
 
     String filename = "blogs_report_" + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss")) + ".pdf";
 
@@ -241,116 +384,100 @@ public class BlogService implements IBlogService {
 
     document.add(new Paragraph("\n"));
 
-    PdfPTable reportTable = new PdfPTable(4);
+    PdfPTable reportTable1 = createTable2("BLOGS WITH DESCRIPTION PHRASE", blogDTO2.getBlogs());
+    document.add(reportTable1);
+
+    document.add(new Paragraph("\n"));
+    Paragraph description2 = new Paragraph("Report for blogs by author " + authorFullName, FontFactory.getFont(FontFactory.HELVETICA, 12));
+    description2.setAlignment(Element.ALIGN_CENTER);
+    document.add(description2);
+    document.add(new Paragraph("\n"));
+
+    PdfPTable reportTable2 = createTable2("BLOGS BY AUTHOR", blogsByAuthor);
+    document.add(reportTable2);
+
+
+    document.add(new Paragraph("\n"));
+    Paragraph description3 = new Paragraph("Report for blogs by category " + category, FontFactory.getFont(FontFactory.HELVETICA, 12));
+    description3.setAlignment(Element.ALIGN_CENTER);
+    document.add(description3);
+    document.add(new Paragraph("\n"));
+
+    PdfPTable reportTable3 = createTable2("BLOGS BY CATEGORY", blogsByCategory);
+    document.add(reportTable3);
+
+    document.add(new Paragraph("\n"));
+
+    addCounts2(document, "Country Counts", blogDTO2.getCountryCounts());
+    addCounts2(document, "Category Counts", blogDTO2.getCategoryCounts());
+    addCounts2(document, "Author Counts", blogDTO2.getAuthorBlogCounts());
+
+    document.close();
+
+    return byteArrayOutputStream.toByteArray();
+}
+
+private PdfPTable createTable2(String title, List<Blog> blogs) throws DocumentException {
+    PdfPTable reportTable = new PdfPTable(5);
     reportTable.setWidthPercentage(100);
 
+    float[] columnWidths = {5, 15, 5, 5, 5};
+    reportTable.setWidths(columnWidths);
+
     Font headerFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD);
+    PdfPCell titleCell = new PdfPCell(new Paragraph(title, headerFont));
+    titleCell.setColspan(5);
+    titleCell.setHorizontalAlignment(Element.ALIGN_CENTER);
+    titleCell.setBackgroundColor(new Color(110, 231, 234, 255));
+    reportTable.addCell(titleCell);
+
     PdfPCell headerCell1 = new PdfPCell(new Paragraph("Title", headerFont));
     PdfPCell headerCell2 = new PdfPCell(new Paragraph("Description", headerFont));
     PdfPCell headerCell3 = new PdfPCell(new Paragraph("Category", headerFont));
     PdfPCell headerCell4 = new PdfPCell(new Paragraph("Created At", headerFont));
+    PdfPCell headerCell5 = new PdfPCell(new Paragraph("Country", headerFont));
 
     headerCell1.setBackgroundColor(new Color(110, 231, 234, 255));
     headerCell2.setBackgroundColor(new Color(110, 231, 234, 255));
     headerCell3.setBackgroundColor(new Color(110, 231, 234, 255));
     headerCell4.setBackgroundColor(new Color(110, 231, 234, 255));
+    headerCell5.setBackgroundColor(new Color(110, 231, 234, 255));
 
     reportTable.addCell(headerCell1);
     reportTable.addCell(headerCell2);
     reportTable.addCell(headerCell3);
     reportTable.addCell(headerCell4);
+    reportTable.addCell(headerCell5);
 
     for (Blog blog : blogs) {
         reportTable.addCell(blog.getTitle());
         reportTable.addCell(blog.getDescription());
         reportTable.addCell(blog.getCategory());
-        reportTable.addCell(blog.getCreatedAt());
+        reportTable.addCell(blog.getCreatedAt().toString());
+        reportTable.addCell(blog.getCountry());
     }
 
-    document.add(reportTable);
+    return reportTable;
+}
 
+private void addCounts2(Document document, String title, Map<String, Long> counts) throws DocumentException {
+    Paragraph titleParagraph = new Paragraph(title, FontFactory.getFont(FontFactory.HELVETICA_BOLD, 14));
+    titleParagraph.setAlignment(Element.ALIGN_CENTER);
+    document.add(titleParagraph);
 
-    Paragraph title2 = new Paragraph("BLOGS REPORT BY AUTHOR", titleFont);
-    title2.setAlignment(Element.ALIGN_CENTER);
-    document.add(title2);
+    PdfPTable countTable = new PdfPTable(2);
+    countTable.setWidthPercentage(50);
+    countTable.setHorizontalAlignment(Element.ALIGN_CENTER);
 
-    Paragraph description2 = new Paragraph("Report for blogs created by author: " + authorFullName, FontFactory.getFont(FontFactory.HELVETICA, 12));
-    description2.setAlignment(Element.ALIGN_CENTER);
-    document.add(description2);
+    Font countFont = FontFactory.getFont(FontFactory.HELVETICA, 12);
 
-    document.add(new Paragraph("\n"));
-
-    PdfPTable reportTable2 = new PdfPTable(4);
-    reportTable2.setWidthPercentage(100);
-
-    Font headerFont2 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD);
-    PdfPCell headerCell12 = new PdfPCell(new Paragraph("Title", headerFont2));
-    PdfPCell headerCell22 = new PdfPCell(new Paragraph("Description", headerFont2));
-    PdfPCell headerCell32 = new PdfPCell(new Paragraph("Category", headerFont2));
-    PdfPCell headerCell42 = new PdfPCell(new Paragraph("Created At", headerFont2));
-
-    headerCell12.setBackgroundColor(new Color(255, 0, 0, 255));
-    headerCell22.setBackgroundColor(new Color(255, 0, 0, 255));
-    headerCell32.setBackgroundColor(new Color(255, 0, 0, 255));
-    headerCell42.setBackgroundColor(new Color(255, 0, 0, 255));
-
-    reportTable2.addCell(headerCell12);
-    reportTable2.addCell(headerCell22);
-    reportTable2.addCell(headerCell32);
-    reportTable2.addCell(headerCell42);
-
-    for (Blog blog : blogsByAuthor) {
-        reportTable2.addCell(blog.getTitle());
-        reportTable2.addCell(blog.getDescription());
-        reportTable2.addCell(blog.getCategory());
-        reportTable2.addCell(blog.getCreatedAt());
+    for (Map.Entry<String, Long> entry : counts.entrySet()) {
+        countTable.addCell(new PdfPCell(new Paragraph(entry.getKey(), countFont)));
+        countTable.addCell(new PdfPCell(new Paragraph(String.valueOf(entry.getValue()), countFont)));
     }
 
-    document.add(reportTable2);
-
-
-    Paragraph title3 = new Paragraph("BLOGS REPORT BY CATEGORY", titleFont);
-    title3.setAlignment(Element.ALIGN_CENTER);
-    document.add(title3);
-
-    Paragraph description3 = new Paragraph("Report for blogs by category: " + category + " created between " + startDate + " and " + endDate , FontFactory.getFont(FontFactory.HELVETICA, 12));
-    description3.setAlignment(Element.ALIGN_CENTER);
-    document.add(description3);
-
-    document.add(new Paragraph("\n"));
-
-    PdfPTable reportTable3 = new PdfPTable(4);
-    reportTable3.setWidthPercentage(100);
-
-    Font headerFont3 = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 12, Font.BOLD);
-    PdfPCell headerCell13 = new PdfPCell(new Paragraph("Title", headerFont3));
-    PdfPCell headerCell23 = new PdfPCell(new Paragraph("Description", headerFont3));
-    PdfPCell headerCell33 = new PdfPCell(new Paragraph("Category", headerFont3));
-    PdfPCell headerCell43 = new PdfPCell(new Paragraph("Created At", headerFont3));
-
-    headerCell13.setBackgroundColor(new Color(0, 255, 0, 255));
-    headerCell23.setBackgroundColor(new Color(0, 255, 0, 255));
-    headerCell33.setBackgroundColor(new Color(0, 255, 0, 255));
-    headerCell43.setBackgroundColor(new Color(0, 255, 0, 255));
-
-    reportTable3.addCell(headerCell13);
-    reportTable3.addCell(headerCell23);
-    reportTable3.addCell(headerCell33);
-    reportTable3.addCell(headerCell43);
-
-    for (Blog blog : blogsByCategory) {
-        reportTable3.addCell(blog.getTitle());
-        reportTable3.addCell(blog.getDescription());
-        reportTable3.addCell(blog.getCategory());
-        reportTable3.addCell(blog.getCreatedAt());
-    }
-
-    document.add(reportTable3);
-
-    document.close();
-
-    return byteArrayOutputStream.toByteArray();
-    }
+    document.add(countTable);
+}
 
     public byte[] generatePdfBytes2(List<Blog> blogsByCountry, List<Blog> blogsByAuthor, BlogDTO blogsByCategory,
                                     String startDate, String endDate, String authorFullName) throws IOException {
