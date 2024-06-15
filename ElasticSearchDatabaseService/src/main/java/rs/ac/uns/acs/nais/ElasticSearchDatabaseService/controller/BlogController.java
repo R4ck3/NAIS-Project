@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Blog;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.BlogService;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO2;
 import java.util.stream.Collectors;
 import java.io.IOException;
 
@@ -129,6 +130,13 @@ public class BlogController {
         @RequestParam(value = "endDate") String endDate) {
 
         return blogService.findByCategoryAndDateRange(category, startDate, endDate);
+    }
+
+    @GetMapping("/searchByDescriptionPhraseWithAggs")
+    public BlogDTO2 searchByDescriptionPhraseWithAggs(
+        @RequestParam(value = "phrase") String phrase) {
+
+        return blogService.searchByDescriptionPhraseWithAggs(phrase);
     }
 
     @GetMapping("/findByDynamicQuery")

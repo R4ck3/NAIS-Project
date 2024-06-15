@@ -30,6 +30,9 @@ public interface BlogRepository extends ElasticsearchRepository<Blog, String> {
     @Query("{\"match_phrase\":{\"description\":\"?0\"}}")
     List<Blog> searchByDescriptionPhrase(String phrase);
 
+    @Query("{\"match_phrase\":{\"description\":\"?0\"}}")
+    List<Blog> searchByDescriptionPhraseWithAggs(String phrase);
+
     @Query("{\"multi_match\":{\"query\":\"?0\",\"fields\":[\"title^3\",\"description\"],\"fuzziness\":\"AUTO\"}}")
     List<Blog> searchByTitleOrDescriptionFuzzy(String searchTerm);
 

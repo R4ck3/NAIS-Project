@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Blog;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO2;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.BlogRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.IBlogService;
 import org.springframework.beans.factory.annotation.Value;
@@ -94,6 +95,22 @@ public class BlogService implements IBlogService {
         return blogRepository.searchByDescriptionPhrase(phrase);
     }
 
+    public BlogDTO2 searchByDescriptionPhraseWithAggs(String phrase) {
+    List<Blog> blogs = blogRepository.searchByDescriptionPhraseWithAggs(phrase);
+
+    Map<String, Long> authorBlogCounts = countByAuthor(blogs);
+    Map<String, Long> countryCounts = countByCountry(blogs);
+    Map<String, Long> categoryCounts = countByCategory(blogs);
+
+    BlogDTO2 blogDTO = new BlogDTO2();
+    blogDTO.setBlogs(blogs);
+    blogDTO.setAuthorBlogCounts(authorBlogCounts);
+    blogDTO.setCountryCounts(countryCounts);
+    blogDTO.setCategoryCounts(categoryCounts);
+
+    return blogDTO;
+}
+
     public List<Blog> searchByTitleOrDescriptionFuzzy(String searchTerm) {
         return blogRepository.searchByTitleOrDescriptionFuzzy(searchTerm);
     }
@@ -136,6 +153,10 @@ public class BlogService implements IBlogService {
     private Map<String, Long> countByCategory(List<Blog> blogs) {
         return blogs.stream()
                 .collect(Collectors.groupingBy(Blog::getCategory, Collectors.counting()));
+    }
+
+    private Map<String, Long> countByAuthor(List<Blog> blogs) {
+        return blogs.stream().collect(Collectors.groupingBy(Blog::getAuthorId, Collectors.counting()));
     }
 
     // public List<Blog> findByCategoryAndDateRange(String category, String startDate, String endDate) {
@@ -344,34 +365,27 @@ public class BlogService implements IBlogService {
 
         Font titleFont = FontFactory.getFont(FontFactory.HELVETICA_BOLD, 24, Font.BOLD);
 
-        // Naslov izveštaja
         Paragraph title = new Paragraph("BLOGS REPORT", titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         document.add(title);
 
-        // Opis izveštaja
         Paragraph description = new Paragraph("Report for blogs created between " + startDate + " and " + endDate, FontFactory.getFont(FontFactory.HELVETICA, 12));
         description.setAlignment(Element.ALIGN_CENTER);
         document.add(description);
 
         document.add(new Paragraph("\n"));
 
-        // Tabela za blogove po zemlji
         PdfPTable reportTable1 = createTable("BLOGS BY COUNTRY", blogsByCountry);
         document.add(reportTable1);
 
-        // Tabela za blogove po autoru
         PdfPTable reportTable2 = createTable("BLOGS BY AUTHOR", blogsByAuthor);
         document.add(reportTable2);
 
-        // Tabela za blogove po kategoriji
         PdfPTable reportTable3 = createTable("BLOGS BY CATEGORY", blogsByCategory.getBlogs());
         document.add(reportTable3);
 
-        // Dodavanje brojača za zemlje
         addCounts(document, "Country Counts", blogsByCategory.getCountryCounts());
 
-        // Dodavanje brojača za kategorije
         addCounts(document, "Category Counts", blogsByCategory.getCategoryCounts());
 
         document.close();

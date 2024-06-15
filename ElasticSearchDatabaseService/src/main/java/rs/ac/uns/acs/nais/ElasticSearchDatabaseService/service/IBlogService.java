@@ -2,6 +2,8 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service;
 
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Blog;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.dto.BlogDTO2;
+
 
 import java.util.stream.Collectors;
 import java.util.List;
@@ -26,6 +28,8 @@ public interface IBlogService {
     List<Blog> findByCustomQuery(String query);
 
     List<Blog> searchByDescriptionPhrase(String phrase);
+
+    BlogDTO2 searchByDescriptionPhraseWithAggs(String phrase);
 
     List<Blog> searchByTitleOrDescriptionFuzzy(String searchTerm);
 
