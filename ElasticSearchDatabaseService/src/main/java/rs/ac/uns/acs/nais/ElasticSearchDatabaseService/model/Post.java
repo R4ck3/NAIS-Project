@@ -8,10 +8,10 @@ import java.util.Date;
 public class Post {
     @Id
     private String id;
-    private String author_id;
-    private String blog_id;
+    private String authorId;
+    private String blogId;
     private String content;
-    private Date created_at;
+    private Date createdAt;
 
     public String getId() {
         return id;
@@ -21,20 +21,20 @@ public class Post {
         this.id = id;
     }
 
-    public String getAuthor_id() {
-        return author_id;
+    public String getAuthorId() {
+        return authorId;
     }
 
-    public void setAuthor_id(String author_id) {
-        this.author_id = author_id;
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
     }
 
-    public String getBlog_id() {
-        return blog_id;
+    public String getBlogId() {
+        return blogId;
     }
 
-    public void setBlog_id(String blog_id) {
-        this.blog_id = blog_id;
+    public void setBlogId(String blogId) {
+        this.blogId = blogId;
     }
 
     public String getContent() {
@@ -45,11 +45,11 @@ public class Post {
         this.content = content;
     }
 
-    public Date getCreated_at() {
-        return created_at;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setCreated_at(Date created_at) {
-        this.created_at = created_at;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 }
