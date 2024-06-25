@@ -1,47 +1,50 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Post;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.PostRepository;
-import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.PostService;
+import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.IPostService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-import java.util.Date;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.StreamSupport;
 
 @Service
-public class PostService implements PostService {
-
-    private final PostRepository postRepository;
+public class PostService implements IPostService {
 
     @Autowired
-    public PostService(PostRepository postRepository) {
-        this.postRepository = postRepository;
+    private PostRepository postRepository;
+
+    @Override
+    public List<Post> getAllPosts() {
+        return StreamSupport.stream(postRepository.findAll().spliterator(), false)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public Post save(Post post) {
-        post.setCreatedAt(new Date());
-        return postRepository.save(post);
-    }
-
-    @Override
-    public Optional<Post> findById(String id) {
+    public Optional<Post> getPostById(String id) {
         return postRepository.findById(id);
     }
 
     @Override
-    public Iterable<Post> findAll() {
-        return postRepository.findAll();
+    public Post createPost(Post post) {
+        return postRepository.save(post);
     }
 
     @Override
-    public void deleteById(String id) {
+    public void deletePost(String id) {
         postRepository.deleteById(id);
     }
 
     @Override
-    public Iterable<Post> findByContent(String content) {
-        return postRepository.findByContent(content);
+    public Post updatePost(String id, Post post) {
+        if (postRepository.existsById(id)) {
+            post.setId(id);
+            return postRepository.save(post);
+        } else {
+            throw new RuntimeException("Post not found");
+        }
     }
 }
