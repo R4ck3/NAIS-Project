@@ -1,50 +1,48 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Post;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.PostRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.IPostService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 @Service
 public class PostService implements IPostService {
 
     @Autowired
-    private PostRepository postRepository;
+    private PostRepository repository;
 
     @Override
     public List<Post> getAllPosts() {
-        return StreamSupport.stream(postRepository.findAll().spliterator(), false)
-                .collect(Collectors.toList());
-    }
-
-    @Override
-    public Optional<Post> getPostById(String id) {
-        return postRepository.findById(id);
+        List<Post> posts = new ArrayList<>();
+        repository.findAll().forEach(posts::add);
+        return posts;
     }
 
     @Override
     public Post createPost(Post post) {
-        return postRepository.save(post);
+        return repository.save(post);
     }
 
     @Override
-    public void deletePost(String id) {
-        postRepository.deleteById(id);
+    public Post getPostById(String id) {
+        return repository.findById(id).orElse(null);
     }
 
     @Override
-    public Post updatePost(String id, Post post) {
-        if (postRepository.existsById(id)) {
-            post.setId(id);
-            return postRepository.save(post);
-        } else {
-            throw new RuntimeException("Post not found");
+    public void deletePostById(String id) {
+        repository.deleteById(id);
+    }
+
+    @Override
+    public Post updatePost(String id, Post updatedPost) {
+        if (repository.existsById(id)) {
+            updatedPost.setId(id);
+            return repository.save(updatedPost);
         }
+        return null;
     }
 }

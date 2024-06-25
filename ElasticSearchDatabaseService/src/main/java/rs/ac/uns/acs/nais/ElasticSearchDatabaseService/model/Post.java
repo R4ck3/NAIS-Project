@@ -2,16 +2,28 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 import java.util.Date;
 
 @Document(indexName = "posts")
 public class Post {
     @Id
     private String id;
+
+    @Field(type = FieldType.Text)
     private String authorId;
+
+    @Field(type = FieldType.Text)
     private String blogId;
+
+    @Field(type = FieldType.Text)
     private String content;
+
+    @Field(type = FieldType.Date)
     private Date createdAt;
+
+    // Getteri i setteri
 
     public String getId() {
         return id;
