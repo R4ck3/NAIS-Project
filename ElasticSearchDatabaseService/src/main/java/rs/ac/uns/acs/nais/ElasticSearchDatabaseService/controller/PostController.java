@@ -54,4 +54,12 @@ public class PostController {
         return postService.findByTitleOrAuthor(title, author);
     }
 
+    @GetMapping("/getPostsByCategoryAndDateRange")
+    public List<Post> getPostsByCategoryAndDateRange(
+        @RequestParam(value = "category") String category,
+        @RequestParam(value = "startDate") String startDate,
+        @RequestParam(value = "endDate") String endDate
+    ) {
+        return postService.findByCategoryAndDateRange(category, startDate, endDate);
+    }
 }

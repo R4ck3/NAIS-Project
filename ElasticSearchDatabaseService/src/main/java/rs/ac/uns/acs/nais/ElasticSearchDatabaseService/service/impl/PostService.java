@@ -42,4 +42,8 @@ public class PostService implements IPostService {
     public List<Post> findByTitleOrAuthor(String title, String author) {
         return postRepository.findByTitleOrAuthor(title, author);
     }
+    
+    public List<Post> findByCategoryAndDateRange(String category, String startDate, String endDate) {
+        return postRepository.findByCategoryAndDateRange(category, startDate, endDate);
+    }
 }

@@ -17,7 +17,7 @@ def generate_post():
     'Coda',
     'Radovan',
     'Dejan',
-    'Miroslav'
+    'Miroslav',
     'Jovo'
 ]),
         "createdAt": faker.date_between(start_date='-1y', end_date='today').strftime('%Y-%m-%d'),
@@ -27,7 +27,7 @@ def generate_post():
     }
 
 # Generate and send 1000 posts
-for _ in range(1000):
+for _ in range(300):
     post_data = generate_post()
     response = requests.post(url, json=post_data)
     if response.status_code != 200:

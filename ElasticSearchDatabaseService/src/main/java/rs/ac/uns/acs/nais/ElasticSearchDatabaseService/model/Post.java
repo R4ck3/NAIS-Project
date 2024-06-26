@@ -28,7 +28,7 @@ public class Post {
     @Field(type=FieldType.Keyword, name = "createdAt")
     private String createdAt;
 
-    @Field(type = FieldType.Text, name = "category")
+    @Field(type = FieldType.Keyword, name = "category")
     private String category;
 
     @Field(type = FieldType.Keyword, name = "likes")

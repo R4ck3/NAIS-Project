@@ -14,4 +14,10 @@ public interface PostRepository extends ElasticsearchRepository<Post, String> {
     List<Post> findAll();
 
     List<Post> findByTitleOrAuthor(String title, String author);
+
+     @Query("{\"bool\": {\"must\": [" +
+        "{\"term\": {\"category\": \"?0\"}}," +
+        "{\"range\": {\"createdAt\": {\"gte\": \"?1\", \"lte\": \"?2\"}}}" +
+        "]}}")
+    List<Post> findByCategoryAndDateRange(String category, String startDate, String endDate);
 }

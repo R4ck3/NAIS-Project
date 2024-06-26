@@ -17,4 +17,6 @@ public interface IPostService {
     void deletePost(String id);
 
     List<Post> findByTitleOrAuthor(String title, String author); 
+
+    List<Post> findByCategoryAndDateRange(String category, String startDate, String endDate);
 }
