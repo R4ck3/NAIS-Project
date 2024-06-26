@@ -1,10 +1,17 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository;
 
-import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Post;
-
+import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.data.elasticsearch.annotations.Query;
+import org.springframework.data.repository.query.Param;
 import java.util.List;
 
+@Repository
 public interface PostRepository extends ElasticsearchRepository<Post, String> {
-    List<Post> findByAuthorId(String authorId);
+
+    @Query("{\"match_all\": {}}")
+    List<Post> findAll();
+
+    List<Post> findByTitleOrAuthor(String title, String author);
 }

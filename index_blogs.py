@@ -8,7 +8,7 @@ faker = Faker()
 
 def generate_blog(blog_id):
     return {
-        "authorId": str(random.randint(1, 20)),
+        "authorId": str(random.randint(1, 5)),
         "blogId": str(blog_id),
         "category": random.choice([
     'Travel',
@@ -16,51 +16,22 @@ def generate_blog(blog_id):
     'Food and Recipes',
     'Technology',
     'Personal Finance',
-    'Lifestyle',
-    'Fashion',
-    'Beauty',
-    'Parenting',
-    'DIY and Crafts',
-    'Education',
-    'Career and Business',
-    'Books and Literature',
-    'Movies and TV Shows',
-    'Music',
-    'Gaming',
-    'Sports',
-    'Home and Garden',
-    'Photography',
     'Pets'
 ]),
-        "title": faker.word().capitalize(),
-        "description": faker.paragraph(nb_sentences=7),
+        "title": faker.paragraph(nb_sentences=1),
+        "description": faker.paragraph(nb_sentences=6),
         "createdAt": faker.date_time_between(start_date='-1y', end_date='now').isoformat(),
         "country": random.choice( [
-    'United States',
+    'Serbia',
     'Canada',
-    'United Kingdom',
+    'Niger',
     'Australia',
-    'Germany',
-    'France',
-    'Italy',
-    'Spain',
-    'Japan',
-    'China',
-    'India',
-    'Brazil',
-    'Mexico',
-    'Russia',
-    'South Africa',
-    'South Korea',
-    'New Zealand',
-    'Argentina',
-    'Netherlands',
     'Sweden'
 ])
     }
 
 # Generate and send 1000 blogs
-for i in range(1000):
+for i in range(5000):
     blog_data = generate_blog(i)
     response = requests.post(url, json=blog_data)
     if response.status_code != 200:
