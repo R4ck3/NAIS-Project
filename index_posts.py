@@ -27,7 +27,7 @@ def generate_post():
     }
 
 # Generate and send 1000 posts
-for _ in range(300):
+for _ in range(5000):
     post_data = generate_post()
     response = requests.post(url, json=post_data)
     if response.status_code != 200:

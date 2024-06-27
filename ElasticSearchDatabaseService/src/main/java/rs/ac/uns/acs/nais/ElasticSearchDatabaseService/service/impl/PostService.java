@@ -1,5 +1,6 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
+import com.example.postservice.dto.PostTermSearchResponseDTO;
 import com.example.postservice.dto.PostSearchResponseDTO;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Post;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.repository.PostRepository;
@@ -80,6 +81,16 @@ public class PostService implements IPostService {
                 .collect(Collectors.groupingBy(Post::getCategory, Collectors.counting()));
     }
 
+    private Map<String, Long> countByAuthor(List<Post> posts) {
+        return posts.stream()
+                .collect(Collectors.groupingBy(Post::getAuthor, Collectors.counting()));
+    }
+
+    private Map<String, Long> countByBlogId(List<Post> posts) {
+        return posts.stream()
+                .collect(Collectors.groupingBy(Post::getBlogId, Collectors.counting()));
+    }
+
     public PostSearchResponseDTO findByAuthorAndDateRangeAndLikes(String author, String startDate, String endDate, int likes) {
         List<Post> posts = postRepository.findByAuthorAndDateRangeAndLikes(author, startDate, endDate, likes);
 
@@ -109,6 +120,21 @@ public class PostService implements IPostService {
         ptsd.setPosts(posts);
         ptsd.setLanguageAggregations(languageAggregations);
         ptsd.setCategoryAggregations(categoryCounts);
+
+        return ptsd;
+    }
+
+    @Override
+    public PostTermSearchResponseDTO findByTitleAndCategoryAndLanguageAndDateRange(String title, String category, String language, String startDate, String endDate) {
+        List<Post> posts = postRepository.findByTitleAndCategoryAndLanguageAndDateRange(title, category, language, startDate, endDate);
+
+        Map<String, Long> authorAggregations = countByAuthor(posts);
+        Map<String, Long> blogIdAggregations = countByBlogId(posts);
+
+        PostTermSearchResponseDTO ptsd = new PostTermSearchResponseDTO();
+        ptsd.setPosts(posts);
+        ptsd.setAuthorAggregations(authorAggregations);
+        ptsd.setBlogIdAggregations(blogIdAggregations);
 
         return ptsd;
     }

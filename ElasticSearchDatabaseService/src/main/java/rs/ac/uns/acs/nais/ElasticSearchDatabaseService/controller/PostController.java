@@ -4,6 +4,7 @@ import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Post;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.example.postservice.dto.PostTermSearchResponseDTO;
 import com.example.postservice.dto.PostSearchResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
@@ -83,5 +84,15 @@ public class PostController {
             @RequestParam String startDate,
             @RequestParam String endDate) {
         return postService.findByTitleOrDescriptionAndDateRange(text, startDate, endDate);
+    }
+
+    @GetMapping("/search/title-category-language-date")
+    public PostTermSearchResponseDTO findByTitleAndCategoryAndLanguageAndDateRange(
+            @RequestParam String title,
+            @RequestParam String category,
+            @RequestParam String language,
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        return postService.findByTitleAndCategoryAndLanguageAndDateRange(title, category, language, startDate, endDate);
     }
 }
