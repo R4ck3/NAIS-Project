@@ -44,10 +44,17 @@ public interface PostRepository extends ElasticsearchRepository<Post, String> {
     List<Post> findByTitleOrDescriptionAndDateRange(String text, String startDate, String endDate);
 
     @Query("{\"bool\": {\"must\": [" +
-           "{\"fuzzy\": {\"title\": \"?0\"}}," +
-           "{\"term\": {\"category\": \"?1\"}}," +
-           "{\"term\": {\"language\": \"?2\"}}," +
-           "{\"range\": {\"createdAt\": {\"gte\": \"?3\", \"lte\": \"?4\"}}}" +
-           "]}}")
+        "{\"fuzzy\": {\"title\": \"?0\"}}," +
+        "{\"term\": {\"category\": \"?1\"}}," +
+        "{\"term\": {\"language\": \"?2\"}}," +
+        "{\"range\": {\"createdAt\": {\"gte\": \"?3\", \"lte\": \"?4\"}}}" +
+        "]}}")
     List<Post> findByTitleAndCategoryAndLanguageAndDateRange(String title, String category, String language, String startDate, String endDate);
+
+    @Query("{\"bool\": {\"must\": [" +
+        "{\"match\": {\"title\": \"?0\"}}," +
+        "{\"term\": {\"category\": \"?1\"}}," +
+        "{\"range\": {\"createdAt\": {\"gte\": \"?2\", \"lte\": \"?3\"}}}" +
+        "]}}")
+    List<Post> findByTitleAndCategoryAndDateRange(String title, String category, String startDate, String endDate);
 }

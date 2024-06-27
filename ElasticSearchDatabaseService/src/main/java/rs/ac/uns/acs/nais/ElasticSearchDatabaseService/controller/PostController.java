@@ -4,6 +4,7 @@ import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Post;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import com.example.postservice.dto.ComplexSearchResponseDTO;
 import com.example.postservice.dto.PostTermSearchResponseDTO;
 import com.example.postservice.dto.PostSearchResponseDTO;
 import org.springframework.http.HttpStatus;
@@ -94,5 +95,14 @@ public class PostController {
             @RequestParam String startDate,
             @RequestParam String endDate) {
         return postService.findByTitleAndCategoryAndLanguageAndDateRange(title, category, language, startDate, endDate);
+    }
+
+    @GetMapping("/search/complex")
+    public ComplexSearchResponseDTO findByTitleAndCategoryAndDateRange(
+            @RequestParam String title,
+            @RequestParam String category,
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        return postService.findByTitleAndCategoryAndDateRange(title, category, startDate, endDate);
     }
 }

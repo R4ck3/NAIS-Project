@@ -1,5 +1,6 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl;
 
+import com.example.postservice.dto.ComplexSearchResponseDTO;
 import com.example.postservice.dto.PostTermSearchResponseDTO;
 import com.example.postservice.dto.PostSearchResponseDTO;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Post;
@@ -90,6 +91,12 @@ public class PostService implements IPostService {
         return posts.stream()
                 .collect(Collectors.groupingBy(Post::getBlogId, Collectors.counting()));
     }
+    
+    private Map<String, Double> calculateAverageLikesPerAuthor(List<Post> posts) {
+        return posts.stream()
+                .collect(Collectors.groupingBy(Post::getAuthor, 
+                        Collectors.averagingInt(post -> Integer.parseInt(post.getLikes()))));
+    }
 
     public PostSearchResponseDTO findByAuthorAndDateRangeAndLikes(String author, String startDate, String endDate, int likes) {
         List<Post> posts = postRepository.findByAuthorAndDateRangeAndLikes(author, startDate, endDate, likes);
@@ -137,5 +144,23 @@ public class PostService implements IPostService {
         ptsd.setBlogIdAggregations(blogIdAggregations);
 
         return ptsd;
+    }
+
+    @Override
+    public ComplexSearchResponseDTO findByTitleAndCategoryAndDateRange(String title, String category, String startDate, String endDate) {
+        List<Post> posts = postRepository.findByTitleAndCategoryAndDateRange(title, category, startDate, endDate);
+
+        // Perform aggregations
+        Map<String, Long> authorAggregations = countByAuthor(posts);
+        Map<String, Long> blogIdAggregations = countByBlogId(posts);
+        Map<String, Double> averageLikesPerAuthor = calculateAverageLikesPerAuthor(posts);
+
+        ComplexSearchResponseDTO responseDTO = new ComplexSearchResponseDTO();
+        responseDTO.setPosts(posts);
+        responseDTO.setAuthorAggregations(authorAggregations);
+        responseDTO.setBlogIdAggregations(blogIdAggregations);
+        responseDTO.setAverageLikesPerAuthor(averageLikesPerAuthor);
+
+        return responseDTO;
     }
 }

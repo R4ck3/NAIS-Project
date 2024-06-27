@@ -3,6 +3,7 @@ package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Post;
 import com.example.postservice.dto.PostTermSearchResponseDTO;
 import com.example.postservice.dto.PostSearchResponseDTO;
+import com.example.postservice.dto.ComplexSearchResponseDTO;
 
 import java.util.List;
 
@@ -29,4 +30,6 @@ public interface IPostService {
     PostSearchResponseDTO findByTitleOrDescriptionAndDateRange(String text, String startDate, String endDate);
 
     PostTermSearchResponseDTO findByTitleAndCategoryAndLanguageAndDateRange(String title, String category, String language, String startDate, String endDate);
+
+    ComplexSearchResponseDTO findByTitleAndCategoryAndDateRange(String title, String category, String startDate, String endDate);
 }
