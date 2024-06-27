@@ -76,4 +76,12 @@ public class PostController {
             @RequestParam int likes) {
         return postService.findByAuthorAndDateRangeAndLikes(author, startDate, endDate, likes);
     }
+
+    @GetMapping("/search/title-description")
+    public PostSearchResponseDTO findByTitleOrDescriptionAndDateRange(
+            @RequestParam String text,
+            @RequestParam String startDate,
+            @RequestParam String endDate) {
+        return postService.findByTitleOrDescriptionAndDateRange(text, startDate, endDate);
+    }
 }

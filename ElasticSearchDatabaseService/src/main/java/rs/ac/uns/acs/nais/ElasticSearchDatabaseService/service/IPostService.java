@@ -24,4 +24,6 @@ public interface IPostService {
     List<Post> searchPostsFuzzy(String term);
 
     PostSearchResponseDTO findByAuthorAndDateRangeAndLikes(String author, String startDate, String endDate, int likes);
+
+    PostSearchResponseDTO findByTitleOrDescriptionAndDateRange(String text, String startDate, String endDate);
 }

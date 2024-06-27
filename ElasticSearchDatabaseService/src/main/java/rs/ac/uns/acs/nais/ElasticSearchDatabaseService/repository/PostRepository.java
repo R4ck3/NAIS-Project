@@ -33,4 +33,13 @@ public interface PostRepository extends ElasticsearchRepository<Post, String> {
         "{\"range\": {\"likes\": {\"gt\": \"?3\"}}}" +
         "]}}")
     List<Post> findByAuthorAndDateRangeAndLikes(String author, String startDate, String endDate, int likes);
+
+    @Query("{\"bool\": {\"must\": [" +
+        "{\"bool\": {\"should\": [" +
+        "{\"match\": {\"title\": \"?0\"}}," +
+        "{\"match\": {\"description\": \"?0\"}}" +
+        "]}}, " +
+        "{\"range\": {\"createdAt\": {\"gte\": \"?1\", \"lte\": \"?2\"}}}" +
+        "]}}")
+    List<Post> findByTitleOrDescriptionAndDateRange(String text, String startDate, String endDate);
 }

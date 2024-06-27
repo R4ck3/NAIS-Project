@@ -94,4 +94,22 @@ public class PostService implements IPostService {
 
         return ptsd;
     }
+
+    @Override
+    public PostSearchResponseDTO findByTitleOrDescriptionAndDateRange(String text, String startDate, String endDate) {
+        List<Post> posts = postRepository.findByTitleOrDescriptionAndDateRange(text, startDate, endDate);
+
+        posts.sort(Comparator.comparing(Post::getLikes).reversed());
+
+        Map<String, Long> languageAggregations = countByLanguage(posts);
+
+        Map<String, Long> categoryCounts = countByCategory(posts);
+
+        PostSearchResponseDTO ptsd = new PostSearchResponseDTO();
+        ptsd.setPosts(posts);
+        ptsd.setLanguageAggregations(languageAggregations);
+        ptsd.setCategoryAggregations(categoryCounts);
+
+        return ptsd;
+    }
 }
