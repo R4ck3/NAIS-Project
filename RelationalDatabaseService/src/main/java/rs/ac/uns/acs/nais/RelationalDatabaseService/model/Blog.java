@@ -28,11 +28,12 @@ public class Blog {
     @Column(name = "description", nullable = false)
     private String description;
 
+    @Column(name = "createdAt", nullable = false)
+    private LocalDateTime createdAt;
+
     @Column(name = "country", nullable = false)
     private String country;
 
-    @Column(name = "createdAt", nullable = false)
-    private LocalDateTime createdAt;
 
     public Long getId() {
         return id;
