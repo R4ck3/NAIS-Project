@@ -46,4 +46,8 @@ public class PostService implements IPostService {
     public List<Post> findByCategoryAndDateRange(String category, String startDate, String endDate) {
         return postRepository.findByCategoryAndDateRange(category, startDate, endDate);
     }
+
+    public List<Post> searchPostsFuzzy(String term) {
+        return postRepository.searchPostsFuzzy(term);
+    }
 }

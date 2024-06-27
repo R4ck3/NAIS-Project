@@ -19,4 +19,6 @@ public interface IPostService {
     List<Post> findByTitleOrAuthor(String title, String author); 
 
     List<Post> findByCategoryAndDateRange(String category, String startDate, String endDate);
+
+    List<Post> searchPostsFuzzy(String term);
 }

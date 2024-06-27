@@ -62,4 +62,9 @@ public class PostController {
     ) {
         return postService.findByCategoryAndDateRange(category, startDate, endDate);
     }
+
+    @GetMapping("/search/fuzzy")
+    public List<Post> searchPostsFuzzy(@RequestParam String term) {
+        return postService.searchPostsFuzzy(term);
+    }
 }
