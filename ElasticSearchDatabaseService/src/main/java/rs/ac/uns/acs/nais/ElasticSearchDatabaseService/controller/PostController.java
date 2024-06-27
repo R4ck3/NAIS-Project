@@ -4,7 +4,7 @@ import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Post;
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service.impl.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
+import com.example.postservice.dto.PostSearchResponseDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -66,5 +66,14 @@ public class PostController {
     @GetMapping("/search/fuzzy")
     public List<Post> searchPostsFuzzy(@RequestParam String term) {
         return postService.searchPostsFuzzy(term);
+    }
+    
+    @GetMapping("/search/author-date-likes")
+    public PostSearchResponseDTO findByAuthorAndDateRangeAndLikes(
+            @RequestParam String author,
+            @RequestParam String startDate,
+            @RequestParam String endDate,
+            @RequestParam int likes) {
+        return postService.findByAuthorAndDateRangeAndLikes(author, startDate, endDate, likes);
     }
 }

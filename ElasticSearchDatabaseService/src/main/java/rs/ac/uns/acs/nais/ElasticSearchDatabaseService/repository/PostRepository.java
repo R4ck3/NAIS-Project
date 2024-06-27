@@ -26,4 +26,11 @@ public interface PostRepository extends ElasticsearchRepository<Post, String> {
         "{\"fuzzy\": {\"title\": {\"value\": \"?0\", \"fuzziness\": \"AUTO\"}}}" +
         "]}}")
     List<Post> searchPostsFuzzy(String term);
+
+    @Query("{\"bool\": {\"must\": [" +
+        "{\"term\": {\"author\": \"?0\"}}," +
+        "{\"range\": {\"createdAt\": {\"gte\": \"?1\", \"lte\": \"?2\"}}}," +
+        "{\"range\": {\"likes\": {\"gt\": \"?3\"}}}" +
+        "]}}")
+    List<Post> findByAuthorAndDateRangeAndLikes(String author, String startDate, String endDate, int likes);
 }

@@ -1,6 +1,7 @@
 package rs.ac.uns.acs.nais.ElasticSearchDatabaseService.service;
 
 import rs.ac.uns.acs.nais.ElasticSearchDatabaseService.model.Post;
+import com.example.postservice.dto.PostSearchResponseDTO;
 
 import java.util.List;
 
@@ -21,4 +22,6 @@ public interface IPostService {
     List<Post> findByCategoryAndDateRange(String category, String startDate, String endDate);
 
     List<Post> searchPostsFuzzy(String term);
+
+    PostSearchResponseDTO findByAuthorAndDateRangeAndLikes(String author, String startDate, String endDate, int likes);
 }
